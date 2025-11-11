@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Harmony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/contacto-style.css}">
+</head>
+
+<body>
+    <header class="p-3 header-personalizado">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img th:src="@{/images/logo.png}" alt="Logo Harmony" width="50" height="50" class="me-2">
+                <h1 class="h2 mb-0">Harmony</h1>
+            </div>
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="d-flex align-items-center ms-auto d-none d-lg-flex">
+                <a th:href="@{/inscripcion}" class="btn-brillo me-2 fw-bold">¡Inscríbete!</a>
+                <a th:href="@{/login}" class="btn btn-link text-decoration-none text-black">Iniciar sesión</a>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg d-flex justify-content-center">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/acerca}">Acerca de nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/talleres}">Talleres/Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/profesores}">Profesores</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/inscripcion}">Inscripción</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/blog}">Blog/Noticias</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page"
+                            th:href="@{/contacto}">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="container my-5">
+        <h1 class="text-center mb-4">Contáctanos</h1>
+        <p class="text-center text-muted mb-5">¡Estamos aquí para ayudarte! Completa el siguiente formulario o
+            visítanos.</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card p-4 shadow-sm" style="background-color: #f8f1e9;">
+
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:utext="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:utext="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form th:action="@{/contacto/enviar}" th:method="post">
+                        <h4 class="mb-4">Envíanos un mensaje</h4>
+                        <div class="mb-3">
+                            <label for="nombre-contacto" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="nombre-contacto" name="nombre"
+                                placeholder="Tu nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email-contacto" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email-contacto" name="correo"
+                                placeholder="ejemplo@correo.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="asunto-contacto" class="form-label">Asunto</label>
+                            <select class="form-select" id="asunto-contacto" name="asunto" required>
+                                <option selected disabled value="">Selecciona un asunto...</option>
+                                <option value="Información sobre talleres/cursos">Información sobre talleres/cursos</option>
+                                <option value="Pregunta sobre la inscripción">Pregunta sobre la inscripción</option>
+                                <option value="Consulta sobre un profesor">Consulta sobre un profesor</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="mensaje-contacto" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensaje-contacto" name="mensaje" rows="5"
+                                placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn-formulario btn-lg">Enviar Mensaje</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row text-center justify-content-center">
+                <div class="col-md-4 mb-3">
+                    <h5>Harmony</h5>
+                    <p>Un lugar donde la música cobra vida.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Contáctanos</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt-fill"></i> Sede: Avenida La Molina 1167, local 104, Centro Comercial
+                            La Rotonda 1, La Molina, Lima.</li>
+                        <li><i class="bi bi-telephone-fill"></i> Teléfono: 921 340 064</li>
+                        <li><i class="bi bi-envelope-fill"></i> Correo: chipa.robladillo@gmail.com</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Síguenos</h5>
+                    <a href="#" class="me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                    <a href="#"><i class="bi bi-twitter" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+                    Harmony. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

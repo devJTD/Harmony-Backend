@@ -1,0 +1,226 @@
+/* ======================== */
+/* ===== VARIABLES PARA HEADER ===== */
+/* ======================== */
+:root {
+    --header-fondo: #000000;
+    --header-texto-titulo: #ffffff;
+    --header-texto-navegacion: #ffffff;
+    --header-enlace-activo-color: #f7d002;
+    --header-enlace-activo-fondo: rgba(255, 255, 255, 0.1);
+}
+
+/* ======================== */
+/* ===== VARIABLES PARA FOOTER ===== */
+/* ======================== */
+:root {
+    --footer-fondo: #000000;
+    --footer-texto-general: #ffffff;
+    --footer-texto-enlaces: #ffffff;
+}
+
+/* ======================== */
+/* ===== ESTILOS DE COMPONENTES ===== */
+/* ======================== */
+
+/* Header */
+.header-personalizado {
+    background-color: var(--header-fondo);
+}
+
+.header-personalizado .nav-link {
+    color: var(--header-texto-navegacion) !important;
+}
+
+/* Estilo para el enlace activo */
+.header-personalizado .nav-link.active {
+    color: var(--header-enlace-activo-color) !important;
+    font-weight: bold;
+}
+
+.header-personalizado .h4,
+.header-personalizado .h2 {
+    color: var(--header-texto-titulo) !important;
+}
+
+.header-personalizado .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--footer-fondo) !important;
+}
+
+footer.text-white,
+footer h5,
+footer p,
+footer li,
+footer span {
+    color: var(--footer-texto-general) !important;
+}
+
+footer a {
+    color: var(--footer-texto-enlaces) !important;
+}
+
+/* ======================== */
+/* ===== ESTILOS DEL BOTÓN BRILLO ===== */
+/* ======================== */
+
+.btn-brillo {
+    background-color: #f7d002;
+    /* Un amarillo vibrante */
+    color: #333;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-brillo:hover {
+    background-color: #f7dc57;
+    /* Un amarillo más claro al pasar el mouse */
+    box-shadow: 0 0 10px 5px rgba(214, 214, 74, 0.7);
+    /* Efecto de brillo */
+    transform: translateY(-2px);
+}
+
+/* ======================== */
+/* ===== ESTILOS PARA EL BOTÓN DE INICIAR SESIÓN ===== */
+/* ======================== */
+.header-personalizado .btn-link {
+    color: #724fd2 !important;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.header-personalizado .btn-link:hover {
+    color: #3737b9 !important;
+    background-color: transparent;
+}
+
+/* ======================== */
+/* ===== ESTILOS ADICIONALES PARA PROFESORES ===== */
+/* ======================== */
+.border-profesor {
+    border: 1px solid #3c3939 !important;
+}
+
+
+/* ======================== */
+/* ===== ESTILOS PARA CARDS CON EFECTO FLIP (CORREGIDO) ===== */
+/* ======================== */
+
+/* Contenedor principal de la card con perspectiva 3D */
+.flip-card-container {
+    perspective: 1000px;
+    width: 18rem;
+    /* Altura establecida en 400px (ajustada para centrar el nombre) */
+    height: 400px;
+    margin: 0 10px 20px;
+}
+
+/* Interior de la card que gira */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+/* Efecto de volteo al pasar el cursor */
+.flip-card-container:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Parte frontal y trasera */
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+/* Parte frontal (mantiene el diseño original) */
+.flip-card-front {
+    background-color: white;
+}
+
+/* Parte trasera (rotada 180 grados) */
+.flip-card-back {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Padding ajustado para texto */
+    padding: 25px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Card frontal con altura completa (AJUSTE CLAVE: Centrado Vertical) */
+.flip-card-front .card {
+    height: 100%;
+    border: 2px solid #667eea;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Centra el bloque de contenido (imagen + body) verticalmente */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ajuste: distribuye el espacio */
+    align-items: center;
+}
+
+/* Imagen de la card */
+.flip-card-front .card-img-top {
+    /* Altura de imagen ajustada (más grande para el nombre) */
+    height: 330px;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Card body para el nombre (ajuste para eliminar el espacio del taller) */
+.flip-card-front .card-body {
+    padding: 0.75rem;
+    flex-grow: 0; /* No toma espacio extra */
+}
+/* Removiendo el texto estático del taller */
+.flip-card-front .card-body .card-text {
+    display: none; 
+}
+
+
+/* Estilos para el contenido de la parte trasera (Título eliminado/oculto) */
+.flip-card-back h5 {
+    display: none;
+}
+
+.flip-card-back .sobre-mi {
+    font-size: 16px;
+    line-height: 1.7;
+    text-align: center;
+    font-style: italic;
+    opacity: 0.95;
+    margin-top: 0;
+}
+
+/* Responsive: ajuste para móviles */
+@media (max-width: 768px) {
+    .flip-card-container {
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto 20px;
+        height: 370px;
+    }
+    .flip-card-front .card-img-top {
+        height: 278px;
+    }
+}

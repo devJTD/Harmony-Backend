@@ -1,0 +1,18 @@
+/* Estilos específicos para el Panel de Recursos y Materiales */
+
+/* Color principal de la aplicación (Armonía) */
+.text-harmony-title {
+    color: #5e3ea1 !important; /* Mismo color morado */
+    font-weight: 700;
+}
+
+/* Estilo para la sección de añadir nuevo recurso */
+.bg-light-purple {
+    background-color: #f6f3fb; /* Un color muy suave para el área de creación */
+}
+
+/* Estilo para los badges de asignación */
+.table td span.badge {
+    font-size: 0.9em;
+    padding: 0.4em 0.6em;
+}

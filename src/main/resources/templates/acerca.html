@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca de nosotros - Harmony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/acerca-style.css}">
+</head>
+
+<body>
+    <header class="p-3 header-personalizado">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img th:src="@{/images/logo.png}" alt="Logo Harmony" width="50" height="50" class="me-2">
+                <h1 class="h2 mb-0">Harmony</h1>
+            </div>
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="d-flex align-items-center ms-auto d-none d-lg-flex">
+                <a th:href="@{/inscripcion}" class="btn-brillo me-2 fw-bold">¡Inscríbete!</a>
+                <a th:href="@{/login}" class="btn btn-link text-decoration-none text-black">Iniciar sesión</a>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg d-flex justify-content-center">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/acerca}">Acerca de
+                            nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/talleres}">Talleres/Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/profesores}">Profesores</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/inscripcion}">Inscripción</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/blog}">Blog/Noticias</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="container my-5">
+        <h1 class="text-center mb-5">Acerca de nosotros</h1>
+        <div class="row featurette align-items-center mb-5">
+            <div class="col-md-7">
+                <h2 class="fw-bold">Nuestra Historia y Origen <span class="text-muted">Un sueño hecho realidad.</span>
+                </h2>
+                <p class="lead">Harmony nació de la pasión por la música y el deseo de compartir su poder transformador.
+                    Fundada por un grupo de músicos y educadores, nuestra academia comenzó como un pequeño espacio
+                    dedicado a fomentar el talento local. Con los años, hemos crecido, pero nuestra misión sigue siendo
+                    la misma: crear un ambiente donde cada estudiante pueda descubrir su voz musical, independientemente
+                    de su edad o nivel de experiencia.</p>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid rounded-3" th:src="@{/images/historia.jpg}" alt="Historia de la academia">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row featurette align-items-center mb-5">
+            <div class="col-md-7 order-md-2">
+                <h2 class="fw-bold">Misión y Objetivos <span class="text-muted">Inspirar y educar.</span></h2>
+                <p class="lead">Nuestra misión es proporcionar una educación musical de alta calidad que inspire
+                    creatividad, disciplina y un amor de por vida por el arte. Nos dedicamos a nutrir a los futuros
+                    músicos, artistas y oyentes. Nuestros objetivos incluyen ofrecer un currículo diverso y completo,
+                    mantener un equipo de profesores expertos y apasionados, y fomentar una comunidad de apoyo donde los
+                    estudiantes se sientan animados a explorar y crecer.</p>
+            </div>
+            <div class="col-md-5 order-md-1">
+                <img class="img-fluid rounded-3" th:src="@{/images/mision.jpg}" alt="Misión y objetivos de la academia">
+            </div>
+        </div>
+    </main>
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row text-center justify-content-center">
+                <div class="col-md-4 mb-3">
+                    <h5>Harmony</h5>
+                    <p>Un lugar donde la música cobra vida.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Contáctanos</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt-fill"></i> Sede: Avenida La Molina 1167, local 104, Centro Comercial
+                            La Rotonda 1, La Molina, Lima.</li>
+                        <li><i class="bi bi-telephone-fill"></i> Teléfono: 921 340 064</li>
+                        <li><i class="bi bi-envelope-fill"></i> Correo: chipa.robladillo@gmail.com</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Síguenos</h5>
+                    <a href="#" class="me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                    <a href="#"><i class="bi bi-twitter" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="mb-0">&copy; <span id="year" th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+                    Harmony. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

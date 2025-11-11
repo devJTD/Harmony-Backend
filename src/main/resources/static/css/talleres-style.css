@@ -1,0 +1,140 @@
+/* ======================== */
+/* ===== VARIABLES PARA HEADER ===== */
+/* ======================== */
+:root {
+	--header-fondo: #000000;
+	--header-texto-titulo: #ffffff;
+	--header-texto-navegacion: #ffffff;
+	--header-enlace-activo-color: #f7d002;
+	--header-enlace-activo-fondo: rgba(255, 255, 255, 0.1);
+}
+
+/* ======================== */
+/* ===== VARIABLES PARA FOOTER ===== */
+/* ======================== */
+:root {
+	--footer-fondo: #000000;
+	--footer-texto-general: #ffffff;
+	--footer-texto-enlaces: #ffffff;
+}
+
+/* ======================== */
+/* ===== ESTILOS DE COMPONENTES ===== */
+/* ======================== */
+
+/* Header */
+.header-personalizado {
+	background-color: var(--header-fondo);
+}
+
+.header-personalizado .nav-link {
+	color: var(--header-texto-navegacion) !important;
+}
+
+/* Estilo para el enlace activo */
+.header-personalizado .nav-link.active {
+	color: var(--header-enlace-activo-color) !important;
+	font-weight: bold;
+}
+
+.header-personalizado .h4,
+.header-personalizado .h2 {
+	color: var(--header-texto-titulo) !important;
+}
+
+.header-personalizado .navbar-toggler-icon {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Footer */
+footer.bg-dark {
+	background-color: var(--footer-fondo) !important;
+}
+
+footer.text-white,
+footer h5,
+footer p,
+footer li,
+footer span {
+	color: var(--footer-texto-general) !important;
+}
+
+footer a {
+	color: var(--footer-texto-enlaces) !important;
+}
+
+/* ======================== */
+/* ===== ESTILOS DEL BOTÓN BRILLO ===== */
+/* ======================== */
+
+.btn-brillo {
+	background-color: #f7d002;
+	/* Un amarillo vibrante */
+	color: #333;
+	border: none;
+	padding: 0.5rem 1.5rem;
+	border-radius: 0.25rem;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-brillo:hover {
+	background-color: #f7dc57;
+	/* Un amarillo más claro al pasar el mouse */
+	box-shadow: 0 0 10px 5px rgba(214, 214, 74, 0.7);
+	/* Efecto de brillo */
+	transform: translateY(-2px);
+}
+
+/* ======================== */
+/* ===== ESTILOS PARA EL BOTÓN DE INICIAR SESIÓN ===== */
+/* ======================== */
+.header-personalizado .btn-link {
+	color: #724fd2 !important;
+	text-decoration: none;
+	font-weight: bold;
+	transition: color 0.3s ease-in-out;
+}
+
+.header-personalizado .btn-link:hover {
+	color: #3737b9 !important;
+	background-color: transparent;
+}
+
+/* estilos precios */
+.precio-grande {
+	/* Reducir el tamaño de la fuente para que el precio no sobresalga */
+	font-size: 1.25rem;
+	font-weight: bold;
+	color: #333;
+}
+
+.card-body-precio {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	/* Se mantiene el max-height para evitar que el card se estire demasiado si la lista de temas es enorme */
+	max-height: 700px;
+}
+
+/* Contenido de la lista de temas: Reducir padding y ajustar scroll si es necesario */
+.list-group-item {
+	padding: 0.3rem 1rem;
+	font-size: 0.9rem;
+}
+
+/* Ajuste específico para forzar la misma altura en las filas de la tarjeta */
+.card .row.g-0 {
+    /* Ya no es necesario height: 100% si el card no tiene altura fija, 
+       pero se deja para mantener la imagen alineada. */
+    height: 100%; 
+}
+
+@media (min-width: 768px) {
+	/* Hacer que el cuerpo de la tarjeta (columna de texto) tenga la altura del row */
+	.card .col-md-8 {
+		height: 100%;
+	}
+	
+}

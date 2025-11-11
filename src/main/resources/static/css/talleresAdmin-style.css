@@ -1,0 +1,37 @@
+/* Estilos específicos para el Panel de Talleres y Horarios de Administración */
+
+/* Color principal de la aplicación (Armonía) */
+.text-harmony-title {
+    color: #5e3ea1 !important; /* Mismo color morado */
+    font-weight: 700;
+}
+
+/* Estilo para la sección de crear nuevo horario */
+.bg-light-purple {
+    background-color: #f6f3fb; /* Un color muy suave para el área de creación */
+}
+
+/* Estilo para el encabezado del Acordeón que contiene el nombre del taller */
+.taller-header {
+    font-weight: bold;
+    font-size: 1.15rem;
+    color: #5e3ea1; /* Color principal */
+    background-color: #e5dbf7; /* Fondo ligeramente morado para el encabezado del taller */
+}
+
+/* Estilo del cuerpo del acordeón que contiene la tabla de horarios */
+.accordion-body {
+    padding: 0;
+}
+
+/* Estilos de la tabla dentro del acordeón */
+.accordion-body .table {
+    margin-bottom: 0; /* Elimina el margen inferior de la tabla */
+}
+
+/* Estilos para el conteo de vacantes */
+.vacantes-count {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+}

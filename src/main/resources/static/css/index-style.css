@@ -1,0 +1,204 @@
+/* ======================== */
+/* ===== VARIABLES PARA HEADER ===== */
+/* ======================== */
+:root {
+  --header-fondo: #000000;
+  --header-texto-titulo: #ffffff;
+  --header-texto-navegacion: #ffffff;
+  --header-texto-tarjeta: #000000;
+  --header-enlace-activo-color: #f7d002;
+  --header-enlace-activo-fondo: rgba(255, 255, 255, 0.1);
+}
+
+/* ======================== */
+/* ===== VARIABLES PARA SECCIONES PRINCIPALES ===== */
+/* ======================== */
+:root {
+  --seccion-hero-fondo: #ffffff;
+  --seccion-hero-texto: #ffffff;
+  --seccion-hero-capa: rgba(0, 0, 0, 0.5);
+  
+  --seccion-banner-fondo: #000000;
+  --seccion-banner-texto: #ffffff;
+  
+  --seccion-talleres-texto-tarjeta: #ffffff;
+  --seccion-talleres-capa-tarjeta: rgba(0, 0, 0, 0.6);
+}
+
+/* ======================== */
+/* ===== VARIABLES PARA FOOTER ===== */
+/* ======================== */
+:root {
+  --footer-fondo: #000000;
+  --footer-texto-general: #ffffff;
+  --footer-texto-enlaces: #ffffff;
+}
+
+/* ======================== */
+/* ===== ESTILOS DE COMPONENTES ===== */
+/* ======================== */
+
+/* Header */
+.header-personalizado {
+  background-color: var(--header-fondo);
+}
+
+.header-personalizado .nav-link {
+  color: var(--header-texto-navegacion) !important;
+}
+
+/* Estilo para el enlace activo */
+.header-personalizado .nav-link.active {
+    color: var(--header-enlace-activo-color) !important;
+    font-weight: bold;
+    
+}
+
+.header-personalizado .h2, .header-personalizado .h1 {
+  color: var(--header-texto-titulo) !important;
+}
+
+.header-personalizado .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Sección Hero */
+.seccion-hero {
+  height: 60vh;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--seccion-hero-fondo);
+  color: var(--seccion-hero-texto);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+.contenido-hero {
+  z-index: 1;
+}
+
+.capa-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--seccion-hero-capa);
+  z-index: 0;
+}
+
+/* Banner de inscripción */
+.banner-negro {
+  background-color: var(--seccion-banner-fondo);
+  color: var(--seccion-banner-texto);
+  padding: 3.5rem 0;
+}
+
+/* Estilos para el botón llamativo en el banner de inscripciones */
+.btn-llamativo {
+    background-color: #ff007f; 
+    color: white;
+    border: none;
+    padding: 12px 30px; 
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 50px; 
+    box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4); 
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-left: 25px; 
+    text-transform: uppercase;
+}
+
+.btn-llamativo:hover {
+    background-color: #cc0066;
+    transform: translateY(-3px) scale(1.02); 
+    color: white;
+}
+
+/* Tarjetas de Talleres */
+.tarjeta-taller {
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.tarjeta-taller img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.tarjeta-taller:hover img {
+    transform: scale(1.05);
+}
+
+.tarjeta-taller .card-body {
+    padding: 1.5rem;
+}
+
+.tarjeta-taller .card-title {
+    font-size: 1.5rem;
+    color: #000000;
+}
+
+.tarjeta-taller .card-text {
+    color: var(--header-texto-tarjeta);
+}
+
+/* Footer */
+footer.bg-dark {
+  background-color: var(--footer-fondo) !important;
+}
+
+footer.text-white,
+footer h5,
+footer p,
+footer li,
+footer span {
+  color: var(--footer-texto-general) !important;
+}
+
+footer a {
+  color: var(--footer-texto-enlaces) !important;
+}
+
+/* ======================== */
+/* ===== ESTILOS DEL BOTÓN BRILLO ===== */
+/* ======================== */
+
+.btn-brillo {
+    background-color: #f7d002; /* Un amarillo vibrante */
+    color: #333;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-brillo:hover {
+    background-color: #f7dc57; /* Un amarillo más claro al pasar el mouse */
+    box-shadow: 0 0 10px 5px rgba(214, 214, 74, 0.7); /* Efecto de brillo */
+    transform: translateY(-2px);
+}
+
+/* ======================== */
+/* ===== ESTILOS PARA EL BOTÓN DE INICIAR SESIÓN ===== */
+/* ======================== */
+.header-personalizado .btn-link {
+    color: #724fd2 !important;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.header-personalizado .btn-link:hover {
+    color: #3737b9 !important;
+    background-color: transparent;
+}

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talleres y Horarios - Panel de Gestión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/cliente-style.css}">
+    <link rel="stylesheet" th:href="@{/css/talleresAdmin-style.css}">
+</head>
+
+<body>
+    <div class="sidebar d-flex flex-column">
+        <div class="header-logo-dashboard">
+            <a class="d-flex align-items-center text-decoration-none text-white">
+                <img th:src="@{/images/logo.png}" alt="Logo Harmony" width="40" height="40" class="me-2">
+                <h1 class="h5 mb-0 fw-bold">Harmony</h1>
+            </a>
+        </div>
+        <div class="user-info">
+            <strong th:text="${nombreUsuario}">Admin Name</strong>
+        </div>
+        <nav class="nav flex-column">
+            <a th:href="@{/admin/clientes}" class="nav-link-item">
+                <i class="bi bi-people me-2"></i> Clientes
+            </a>
+            <a th:href="@{/admin/profesores}" class="nav-link-item">
+                <i class="bi bi-person-badge me-2"></i> Profesores
+            </a>
+            <a th:href="@{/admin/talleres}" class="nav-link-item active">
+                <i class="bi bi-music-note-list me-2"></i> Talleres y Horarios
+            </a>
+            <div class="mt-auto">
+                <a th:href="@{/}" class="nav-link-item nav-link-logout">
+                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <h1 class="mb-4 text-harmony-title">Gestión de Talleres y Horarios</h1>
+        <hr>
+
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <span th:text="${success}">¡Éxito!</span>
+        </div>
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text="${error}">¡Error!</span>
+        </div>
+
+        <section id="anadir-taller" class="mb-5 p-4 border rounded shadow-sm bg-light-purple">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-plus-circle me-2"></i> Añadir Nuevo Taller
+            </h3>
+
+            <form th:action="@{/admin/talleres/registrar}" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="nombreTaller" class="form-label">Nombre del Taller</label>
+                            <input type="text" name="nombre" class="form-control" id="nombreTaller"
+                                placeholder="Ej: Guitarra Clásica" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionTaller" class="form-label">Descripción</label>
+                            <textarea name="descripcion" class="form-control" id="descripcionTaller" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="duracionSemanas" class="form-label">Duración (Semanas)</label>
+                                <input type="number" name="duracionSemanas" class="form-control" id="duracionSemanas"
+                                    min="1" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="clasesPorSemana" class="form-label">Clases por Semana</label>
+                                <input type="number" name="clasesPorSemana" class="form-control" id="clasesPorSemana"
+                                    min="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="precioTaller" class="form-label">Precio Base ($)</label>
+                            <input type="number" name="precio" class="form-control" id="precioTaller" step="0.01"
+                                min="0" placeholder="Ej: 150.00" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="temasCrear" class="form-label">Temas del Taller</label>
+                            <textarea name="temas" class="form-control" id="temasCrear" rows="4"
+                                placeholder="Ej: Posicion de las mano, Primeros acordes, ..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="mb-3 text-secondary">URL de Imágenes</h5>
+                        <div class="mb-3">
+                            <label for="imagenTaller" class="form-label">URL Imagen Taller (Detalle)</label>
+                            <input type="url" name="imagenTaller" class="form-control" id="imagenTaller"
+                                placeholder="http://..." required>
+                            <small class="form-text text-muted">Imagen principal para la ficha del taller.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagenInicio" class="form-label">URL Imagen Inicio (Principal)</label>
+                            <input type="url" name="imagenInicio" class="form-control" id="imagenInicio"
+                                placeholder="http://..." required>
+                            <small class="form-text text-muted">Imagen destacada en la página de inicio.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i> Registrar Nuevo Taller
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="anadir-horario" class="mb-5 p-4 border rounded shadow-sm bg-light-warning">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-calendar-plus me-2"></i> Añadir Nuevo Horario a un
+                Taller
+            </h3>
+
+            <form th:action="@{/admin/horarios/registrar}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="tallerIdHorario" class="form-label">Seleccionar Taller</label>
+                        <select name="tallerId" class="form-select" id="tallerIdHorario" required>
+                            <option value="">-- Seleccione un Taller --</option>
+                            <option th:each="taller : ${talleres}" th:value="${taller.id}" th:text="${taller.nombre}">
+                                Taller de Ejemplo
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="profesorIdHorario" class="form-label">Profesor Asignado</label>
+                        <select name="profesorId" class="form-select" id="profesorIdHorario" required>
+                            <option value="">-- Seleccionar Profesor --</option>
+                            <option th:each="profesor : ${profesores}" th:value="${profesor.id}"
+                                th:text="${profesor.nombreCompleto}">Nombre del Profesor
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label d-block">Días de Clase</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dia_Lunes_new" name="diasDeClase"
+                                value="Lunes">
+                            <label class="form-check-label" for="dia_Lunes_new">Lunes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dia_Martes_new" name="diasDeClase"
+                                value="Martes">
+                            <label class="form-check-label" for="dia_Martes_new">Martes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dia_Miercoles_new" name="diasDeClase"
+                                value="Miércoles">
+                            <label class="form-check-label" for="dia_Miercoles_new">Miércoles</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dia_Jueves_new" name="diasDeClase"
+                                value="Jueves">
+                            <label class="form-check-label" for="dia_Jueves_new">Jueves</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dia_Viernes_new" name="diasDeClase"
+                                value="Viernes">
+                            <label class="form-check-label" for="dia_Viernes_new">Viernes</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="horaInicioHorario" class="form-label">Hora de Inicio (HH:MM)</label>
+                        <input type="time" name="horaInicio" class="form-control" id="horaInicioHorario" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="horaFinHorario" class="form-label">Hora de Fin (HH:MM)</label>
+                        <input type="time" name="horaFin" class="form-control" id="horaFinHorario" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="fechaInicioHorario" class="form-label">Fecha de Inicio</label>
+                        <input type="date" name="fechaInicio" class="form-control" id="fechaInicioHorario" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="vacantesMaximasHorario" class="form-label">Vacantes Máximas</label>
+                    <input type="number" name="vacantesDisponibles" class="form-control" id="vacantesMaximasHorario"
+                        min="1" required>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="bi bi-calendar-check me-2"></i> Añadir Horario
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="edicion-taller" class="mb-5 p-4 border rounded shadow-sm bg-light-info">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-pencil-square me-2"></i> Editar Información del Taller
+            </h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="tallerAEditar" class="form-label">1. Seleccionar Taller a Editar (Solo Activos)</label>
+                    <select class="form-select" id="tallerAEditar" onchange="cargarDatosTaller()">
+                        <option value="">-- Seleccione un Taller --</option>
+                        <option th:each="taller : ${talleresActivos}" th:value="${taller.id}" th:text="${taller.nombre}"
+                            th:data-descripcion="${taller.descripcion}" th:data-duracion="${taller.duracionSemanas}"
+                            th:data-clases="${taller.clasesPorSemana}" th:data-imagen-taller="${taller.imagenTaller}"
+                            th:data-imagen-inicio="${taller.imagenInicio}"
+                            th:data-precio="${#numbers.formatDecimal(taller.precio, 1, 'POINT', 2, 'POINT')}"
+                            th:data-temas="${taller.temas}" th:data-activo="${taller.activo}"> Ej: Guitarra Clásica
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <form id="formEditarTaller" th:action="@{/admin/talleres/editar}" method="post" style="display:none;">
+                <input type="hidden" id="edit-taller-id" name="id">
+
+                <h5 class="mt-4 mb-3 text-secondary">2. Opciones para Editar</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="edit-nombreTaller" class="form-label">Nombre del Taller</label>
+                            <input type="text" class="form-control" id="edit-nombreTaller" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-descripcionTaller" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="edit-descripcionTaller" name="descripcion" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-duracionSemanas" class="form-label">Duración (Semanas)</label>
+                                <input type="number" class="form-control" id="edit-duracionSemanas"
+                                    name="duracionSemanas" min="1" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-clasesPorSemana" class="form-label">Clases por Semana</label>
+                                <input type="number" class="form-control" id="edit-clasesPorSemana"
+                                    name="clasesPorSemana" min="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-precioTaller" class="form-label">Precio Base ($)</label>
+                            <input type="number" class="form-control" id="edit-precioTaller" name="precio" step="0.01"
+                                min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="temasEditar" class="form-label">Temas del Taller (Uno por línea)</label>
+                            <textarea name="temas" class="form-control" id="temasEditar" rows="4"
+                                placeholder="Ej: Tema 1: Introducción a Java...&#10;Tema 2: Variables y tipos de datos..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="edit-imagenTaller" class="form-label">URL Imagen Taller (Detalle)</label>
+                            <input type="url" class="form-control" id="edit-imagenTaller" name="imagenTaller"
+                                placeholder="http://..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-imagenInicio" class="form-label">URL Imagen Inicio (Principal)</label>
+                            <input type="url" class="form-control" id="edit-imagenInicio" name="imagenInicio"
+                                placeholder="http://..." required>
+                        </div>
+
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" id="edit-taller-activo" name="activo"
+                                value="true">
+                            <label class="form-check-label" for="edit-taller-activo">
+                                **Taller Activo / Disponible** <small class="text-muted">(Desmarcar para dar de
+                                    baja)</small>
+                            </label>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Guardar
+                                Cambios
+                                del Taller</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section id="edicion-horario-seccion" class="mb-5 p-4 border rounded shadow-sm bg-light-danger">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-calendar-minus me-2"></i> Editar Horario Específico
+            </h3>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="tallerParaHorarioEditar" class="form-label">1. Seleccionar Taller</label>
+                    <select class="form-select" id="tallerParaHorarioEditar" onchange="cargarHorariosTaller()">
+                        <option value="">-- Seleccione un Taller --</option>
+                        <option th:each="taller : ${talleresActivos}" th:value="${taller.id}"
+                            th:text="${taller.nombre}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="horarioAEditar" class="form-label">2. Seleccionar Horario (Se cargan al elegir
+                        Taller)</label>
+                    <select class="form-select" id="horarioAEditar" onchange="cargarDatosHorario()" disabled>
+                        <option value="">-- Seleccione un Horario --</option>
+                    </select>
+                </div>
+            </div>
+
+            <form id="formEditarHorario" th:action="@{/admin/horarios/editar}" method="post" style="display:none;">
+                <input type="hidden" id="edit-horario-id-seccion" name="id">
+                <h5 class="mt-4 mb-3 text-secondary">3. Opciones para Editar</h5>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="edit-profesor-seccion" class="form-label">Profesor Asignado</label>
+                        <select name="profesorId" class="form-select" id="edit-profesor-seccion" required>
+                            <option value="">-- Seleccionar Profesor --</option>
+                            <option th:each="profesor : ${profesores}" th:value="${profesor.id}"
+                                th:text="${profesor.nombreCompleto}">Nombre del Profesor
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="edit-dia-seccion" class="form-label">Día(s) de la Semana (Separar por coma)</label>
+                        <input type="text" class="form-control" id="edit-dia-seccion" name="diasDeClase"
+                            placeholder="Ej: Lunes, Miércoles" required>
+                        <small class="form-text text-muted">Editar Días.</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="edit-vacantes-seccion" class="form-label">Vacantes Máximas</label>
+                        <input type="number" class="form-control" id="edit-vacantes-seccion" name="vacantesDisponibles"
+                            min="1" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="edit-hora-inicio-seccion" class="form-label">Hora de Inicio (HH:MM)</label>
+                        <input type="time" class="form-control" id="edit-hora-inicio-seccion" name="horaInicio"
+                            required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="edit-hora-fin-seccion" class="form-label">Hora de Fin (HH:MM)</label>
+                        <input type="time" class="form-control" id="edit-hora-fin-seccion" name="horaFin" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="edit-fecha-inicio-seccion" class="form-label">Fecha de Inicio</label>
+                        <input type="date" class="form-control" id="edit-fecha-inicio-seccion" name="fechaInicio"
+                            required>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-save me-1"></i> Guardar Cambios
+                        del Horario</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="listado-talleres-horarios" class="m-2">
+            <h2 class="mb-4">Listado de Talleres y Horarios</h2>
+
+            <div class="accordion" id="accordionTalleres">
+
+                <div th:each="taller, iterStat : ${talleres}" class="accordion-item">
+
+                    <h2 class="accordion-header" th:id="|heading${taller.id}|">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            th:data-bs-target="|#collapse${taller.id}|" th:aria-expanded="${iterStat.first}"
+                            th:aria-controls="|collapse${taller.id}|">
+
+                            <strong th:text="${taller.nombre}">Nombre del Taller</strong>
+                        </button>
+                    </h2>
+
+                    <div th:id="|collapse${taller.id}|" class="accordion-collapse collapse"
+                        th:classappend="${iterStat.first} ? 'show' : ''" th:aria-labelledby="|heading${taller.id}|"
+                        data-bs-parent="#accordionTalleres">
+
+                        <div class="accordion-body p-0">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID Horario</th>
+                                        <th>Profesor</th>
+                                        <th>Día(s)</th>
+                                        <th>Hora</th>
+                                        <th>Vacantes</th>
+                                        <th>Fecha de inicio</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="horario : ${taller.horarios}">
+                                        <td th:text="${horario.id}">1</td>
+                                        <td
+                                            th:text="${horario.profesor != null ? horario.profesor.nombreCompleto : 'Sin Asignar'}">
+                                            Profesor X</td>
+                                        <td th:text="${horario.diasDeClase}">Lunes, Miércoles</td>
+                                        <td>
+                                            <span th:text="${horario.horaInicio}">08:00</span> - <span
+                                                th:text="${horario.horaFin}">10:00</span>
+                                        </td>
+                                        <td th:text="${horario.vacantesDisponibles}">20</td>
+
+                                        <td th:with="hoy=${T(java.time.LocalDate).now()}">
+                                            <span
+                                                th:text="${#temporals.format(horario.fechaInicio, 'dd-MM-yyyy')}">15-10-2025</span>
+
+                                            <span
+                                                th:if="${horario.fechaInicio.isBefore(hoy) or horario.fechaInicio.isEqual(hoy)}"
+                                                class="text-danger fw-bold">(comenzado)</span>
+
+                                            <span th:if="${horario.fechaInicio.isAfter(hoy)}"
+                                                class="text-success fw-bold">(por iniciar)</span>
+                                        </td>
+
+                                        <td>
+                                            <button type="button" th:onclick="|eliminarHorario(${horario.id})|"
+                                                class="btn btn-danger btn-sm" title="Eliminar Horario">
+                                                <i class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        // Se define una variable JavaScript con todos los talleres y sus horarios
+        const ALL_TALLERES = /*[[${talleres}]]*/[];
+
+        // 🚨 FUNCIÓN RENOMBRADA: De 'darDeBajaHorario' a 'eliminarHorario'
+        function eliminarHorario(horarioId) {
+            // Ajusta el mensaje de confirmación para reflejar la eliminación.
+            if (confirm(`¡Cuidado! ¿Confirmas que deseas ELIMINAR permanentemente el horario con ID ${horarioId}?`)) {
+                // Lógica de AJAX o redirección al endpoint de eliminación
+                // Aquí deberías redirigir o hacer un fetch/ajax a tu endpoint de DELETE.
+                window.location.href = `/admin/horarios/eliminar/${horarioId}`; // Ejemplo de redirección
+            }
+        }
+
+        // --- Funciones para la Sección 3: Editar Taller (Metadatos) ---
+        // (Se mantiene sin cambios)
+        function cargarDatosTaller() {
+            const select = document.getElementById('tallerAEditar');
+            const form = document.getElementById('formEditarTaller');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption.value) {
+                // Mostrar formulario y cargar valores
+                form.style.display = 'block';
+                document.getElementById('edit-taller-id').value = selectedOption.value;
+                document.getElementById('edit-nombreTaller').value = selectedOption.text;
+                document.getElementById('edit-descripcionTaller').value = selectedOption.getAttribute('data-descripcion');
+                document.getElementById('edit-duracionSemanas').value = selectedOption.getAttribute('data-duracion');
+                document.getElementById('edit-clasesPorSemana').value = selectedOption.getAttribute('data-clases');
+                document.getElementById('edit-imagenTaller').value = selectedOption.getAttribute('data-imagen-taller');
+                document.getElementById('edit-imagenInicio').value = selectedOption.getAttribute('data-imagen-inicio');
+                document.getElementById('edit-precioTaller').value = selectedOption.getAttribute('data-precio');
+                document.getElementById('temasEditar').value = selectedOption.getAttribute('data-temas');
+
+                // 🚀 CORRECCIÓN CLAVE: Cargar el estado 'activo' en el checkbox
+                const activoEstado = selectedOption.getAttribute('data-activo') === 'true';
+                document.getElementById('edit-taller-activo').checked = activoEstado;
+
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        // --- Funciones para la Sección 4: Editar Horario Específico ---
+        // (Se mantiene sin cambios)
+        function cargarHorariosTaller() {
+            const tallerSelect = document.getElementById('tallerParaHorarioEditar');
+            const horarioSelect = document.getElementById('horarioAEditar');
+            const form = document.getElementById('formEditarHorario');
+            const selectedTallerId = tallerSelect.value;
+
+            // Limpiar y ocultar el formulario de edición de horario
+            horarioSelect.innerHTML = '<option value="">-- Seleccione un Horario --</option>';
+            horarioSelect.disabled = true;
+            form.style.display = 'none';
+
+            if (selectedTallerId) {
+                const taller = ALL_TALLERES.find(t => t.id == selectedTallerId);
+                if (taller && taller.horarios) {
+                    taller.horarios.forEach(horario => {
+                        const option = document.createElement('option');
+                        option.value = horario.id;
+                        // Mostrar una descripción clara del horario
+                        option.textContent = `${horario.diasDeClase} | ${horario.horaInicio} a ${horario.horaFin} (${horario.profesor ? horario.profesor.nombreCompleto : 'Sin Profesor'})`;
+
+                        // Agregar data attributes para cargar los datos en el formulario
+                        option.setAttribute('data-dias', horario.diasDeClase || '');
+                        option.setAttribute('data-inicio', horario.horaInicio || '');
+                        option.setAttribute('data-fin', horario.horaFin || '');
+                        option.setAttribute('data-vacantes', horario.vacantesDisponibles || 0);
+                        option.setAttribute('data-fecha-inicio', horario.fechaInicio || '');
+                        option.setAttribute('data-profesor-id', horario.profesor ? horario.profesor.id : '');
+
+                        horarioSelect.appendChild(option);
+                    });
+                    horarioSelect.disabled = taller.horarios.length === 0;
+                }
+            }
+        }
+
+        function cargarDatosHorario() {
+            const horarioSelect = document.getElementById('horarioAEditar');
+            const form = document.getElementById('formEditarHorario');
+            const selectedOption = horarioSelect.options[horarioSelect.selectedIndex];
+
+            if (selectedOption.value) {
+                // Mostrar formulario y cargar valores
+                form.style.display = 'block';
+
+                document.getElementById('edit-horario-id-seccion').value = selectedOption.value;
+                document.getElementById('edit-profesor-seccion').value = selectedOption.getAttribute('data-profesor-id');
+                document.getElementById('edit-dia-seccion').value = selectedOption.getAttribute('data-dias');
+                document.getElementById('edit-hora-inicio-seccion').value = selectedOption.getAttribute('data-inicio');
+                document.getElementById('edit-hora-fin-seccion').value = selectedOption.getAttribute('data-fin');
+                document.getElementById('edit-fecha-inicio-seccion').value = selectedOption.getAttribute('data-fecha-inicio');
+                document.getElementById('edit-vacantes-seccion').value = selectedOption.getAttribute('data-vacantes');
+
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        // 🚨 ELIMINACIÓN: Se ha quitado el script del modal de edición rápida (DOMContentLoaded Listener)
+    </script>
+
+</body>
+
+</html>

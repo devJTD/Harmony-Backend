@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Acceso - Harmony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/inscripcion-style.css}">
+</head>
+
+<body>
+    <header class="p-3 header-personalizado">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img th:src="@{/images/logo.png}" alt="Logo Harmony" width="50" height="50" class="me-2">
+                <h1 class="h2 mb-0">Harmony</h1>
+            </div>
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="d-flex align-items-center ms-auto d-none d-lg-flex">
+                <a th:href="@{/inscripcion}" class="btn-brillo me-2 fw-bold">¡Inscríbete!</a>
+                <a th:href="@{/login}" class="btn btn-link text-decoration-none text-black">Iniciar sesión</a>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg d-flex justify-content-center">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/acerca}">Acerca de nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/talleres}">Talleres/Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/profesores}">Profesores</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page"
+                            th:href="@{/inscripcion}">Inscripción</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/blog}">Blog/Noticias</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    <h1 class="mt-3">¡Inscripción y Pago Confirmados! 🎉</h1>
+                    <p class="lead text-muted">¡Bienvenido a Harmony! Tus credenciales de acceso han sido generadas
+                        automáticamente.</p>
+                </div>
+
+                <div class="card p-4 shadow-lg card-credenciales mb-4">
+                    <h3 class="mb-4 text-primary">Tus Credenciales de Acceso</h3>
+
+                    <div class="mb-4">
+                        <p class="mb-1 fw-semibold">Correo Electrónico (Usuario):</p>
+                        <span class="credencial-valor fs-5" th:text="${correo} ?: 'ejemplo@correo.com'">
+                            ejemplo@correo.com
+                        </span>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="mb-1 fw-semibold">Contraseña Temporal Generada:</p>
+                        <span class="credencial-valor fs-5 text-danger" th:text="${contrasena} ?: 'Hrmony-1234'">
+                            Hrmony-1234
+                        </span>
+                    </div>
+
+                    <div class="alert alert-warning mt-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        **IMPORTANTE:** Guarda esta contraseña temporal en un lugar seguro. ¡La necesitarás para
+                        ingresar por primera vez! Te recomendamos cambiarla inmediatamente después de iniciar sesión.
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                        <a th:href="@{/login}" class="btn-formulario btn-lg" style="max-width: 300px; width: 100%;">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión Ahora
+                            </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row text-center justify-content-center">
+                <div class="col-md-4 mb-3">
+                    <h5>Harmony</h5>
+                    <p>Un lugar donde la música cobra vida.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Contáctanos</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt-fill"></i> Sede: Avenida La Molina 1167, local 104, Centro Comercial
+                            La Rotonda 1, La Molina, Lima.</li>
+                        <li><i class="bi bi-telephone-fill"></i> Teléfono: 921 340 064</li>
+                        <li><i class="bi bi-envelope-fill"></i> Correo: chipa.robladillo@gmail.com</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Síguenos</h5>
+                    <a href="#" class="me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                    <a href="#"><i class="bi bi-twitter" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+                    Harmony. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

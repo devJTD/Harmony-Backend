@@ -1,0 +1,147 @@
+/* ======================== */
+/* ===== VARIABLES PARA DASHBOARD ===== */
+/* ======================== */
+:root {
+    /* General */
+    --dashboard-fondo-general: #f8f9fa;
+
+    /* Sidebar */
+    --sidebar-ancho: 250px;
+    --sidebar-fondo: #343a40; /* Negro oscuro */
+    --sidebar-texto: rgba(255, 255, 255, 0.8);
+    --sidebar-hover-fondo: #495057;
+    --sidebar-hover-texto: white;
+    --sidebar-borde: 1px solid #495057;
+    
+    /* Logout Link */
+    --logout-color: #dc3545; /* Rojo de Bootstrap */
+
+    /* Contenido Principal */
+    --contenido-fondo: white;
+    --contenido-sombra: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ======================== */
+/* ===== ESTILOS DE COMPONENTES ===== */
+/* ======================== */
+
+/* Estilos de la página */
+body {
+    background-color: var(--dashboard-fondo-general);
+}
+
+/* Sidebar (Barra Lateral) */
+.sidebar {
+    width: var(--sidebar-ancho);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    background-color: var(--sidebar-fondo);
+    color: white;
+    z-index: 1000;
+}
+
+/* Logo y Título en el Sidebar */
+.header-logo-dashboard {
+    padding: 0 20px 20px 20px;
+    border-bottom: var(--sidebar-borde);
+    margin-bottom: 15px;
+}
+
+/* Enlaces de Navegación del Sidebar */
+.nav-link-item {
+    color: var(--sidebar-texto) !important;
+    padding: 15px 20px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-link-item:hover, .nav-link-item.active {
+    background-color: var(--sidebar-hover-fondo);
+    color: var(--sidebar-hover-texto) !important;
+}
+
+/* Estilo para el botón de Salir (Logout) */
+.nav-link-logout {
+    color: var(--logout-color) !important;
+}
+
+.nav-link-logout:hover {
+    background-color: var(--sidebar-hover-fondo);
+    color: var(--logout-color) !important;
+}
+
+/* Contenido Principal */
+.main-content {
+    margin-left: var(--sidebar-ancho); /* Desplaza el contenido principal */
+    padding: 20px;
+}
+
+/* Contenedor del Calendario */
+.calendar-container {
+    background: var(--contenido-fondo);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: var(--contenido-sombra);
+}
+
+/* Estilos de la tabla (Bootstrap ya maneja la mayoría) */
+.table-dark {
+    --bs-table-bg: #212529;
+    color: white;
+}
+
+/* ======================== */
+/* ===== ESTILOS ESPECÍFICOS PARA CAMBIO DE CONTRASEÑA (password.html) ===== */
+/* ======================== */
+
+.password-container {
+    background: var(--contenido-fondo);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: var(--contenido-sombra);
+}
+
+.password-container .form-control {
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.btn-confirmar-password {
+    background-color: #007bff; /* Usamos el azul primario de Bootstrap para la acción */
+    border-color: #007bff;
+    font-weight: bold;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-confirmar-password:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* ======================== */
+/* ===== ESTILOS ADICIONALES PARA TÍTULOS DE HORARIO ===== */
+/* ======================== */
+
+/* Define un color que resalte, como el morado oscuro que usas en el botón de login */
+.text-harmony-title {
+    color: #5e3ea1 !important; /* Morado/Púrpura más oscuro para contraste */
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Opcional: si el sidebar usa el morado, puedes usar un color vibrante para el título principal */
+.main-content h1.text-harmony-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem !important;
+}
+
+.main-content h2.text-harmony-title {
+    font-size: 1.8rem;
+    border-bottom: 2px solid #724fd2; /* Línea de color debajo del subtítulo */
+    padding-bottom: 5px;
+}

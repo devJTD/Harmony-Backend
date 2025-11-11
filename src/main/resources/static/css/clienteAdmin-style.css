@@ -1,0 +1,20 @@
+/* Estilos específicos para el Panel de Clientes de Administración (extraídos del HTML) */
+
+.text-harmony-title {
+    color: #5e3ea1 !important;
+    font-weight: 700;
+}
+
+.main-content {
+    /* Ajusta el padding para dar espacio al contenido */
+    padding-top: 20px;
+}
+
+/* Estilo para el nombre de usuario debajo del logo en el sidebar */
+.user-info {
+    color: #fff;
+    padding: 5px 15px 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 10px;
+}

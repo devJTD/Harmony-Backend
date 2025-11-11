@@ -1,0 +1,26 @@
+/* Estilos específicos para el Panel de Profesores de Administración */
+
+/* Color principal de la aplicación (Armonía) */
+.text-harmony-title {
+    color: #5e3ea1 !important; /* Mismo color morado */
+    font-weight: 700;
+}
+
+/* Estilo para el área de registro de un nuevo profesor */
+#registro-profesor {
+    background-color: #f8f1e9; /* Un color suave para destacar la sección de registro */
+}
+
+/* Estilo para el área de contenido principal */
+.main-content {
+    padding-top: 20px;
+}
+
+/* Estilo para el nombre de usuario debajo del logo en el sidebar */
+.user-info {
+    color: #fff;
+    padding: 5px 15px 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 10px;
+}

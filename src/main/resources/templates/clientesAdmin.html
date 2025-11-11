@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Panel de Gestión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/cliente-style.css}">
+    <link rel="stylesheet" th:href="@{/css/clientesAdmin-style.css}">
+</head>
+
+<body>
+    <div class="sidebar d-flex flex-column">
+        <div class="header-logo-dashboard">
+            <a th:href="@{/admin/dashboard}" class="d-flex align-items-center text-decoration-none text-white">
+                <img th:src="@{/images/logo.png}" alt="Logo Harmony" width="40" height="40" class="me-2">
+                <h1 class="h5 mb-0 fw-bold">Harmony</h1>
+            </a>
+        </div>
+        <div class="user-info">
+            <strong th:text="${nombreUsuario}">Admin Name</strong>
+        </div>
+        <nav class="nav flex-column">
+            <a th:href="@{/admin/clientes}" class="nav-link-item active">
+                <i class="bi bi-people me-2"></i> Clientes
+            </a>
+            <a th:href="@{/admin/profesores}" class="nav-link-item">
+                <i class="bi bi-person-badge me-2"></i> Profesores
+            </a>
+            <a th:href="@{/admin/recursos}" class="nav-link-item">
+                <i class="bi bi-folder-fill me-2"></i> Recursos y materiales
+            </a>
+            <div class="mt-auto">
+                <a th:href="@{/logout}" class="nav-link-item nav-link-logout">
+                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <h1 class="mb-4 text-harmony-title">Gestión de Clientes</h1>
+        <hr>
+        <div id="validationAlert" class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Atención:</strong> Debes seleccionar un horario para cada taller elegido.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <section id="registro-cliente" class="mb-5 p-4 border rounded shadow-sm" style="background-color: #f8f1e9;">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-person-add me-2"></i> Registrar Nuevo Cliente</h3>
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <form id="registroClienteForm" th:action="@{/admin/clientes/registrar}" method="post"
+                        th:object="${cliente}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-3 text-secondary">Datos Personales</h5>
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre Completo</label>
+                                    <input type="text" th:field="*{nombreCompleto}" class="form-control" id="nombre"
+                                        name="nombre" placeholder="Ej: Juan Pérez" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" th:field="*{correo}" class="form-control" id="email"
+                                        name="email" placeholder="ejemplo@correo.com" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="tel" th:field="*{telefono}" class="form-control" id="telefono"
+                                        name="telefono" placeholder="Ej: +51 921 340 064" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mb-3 text-secondary">Selección de Talleres y Horarios</h5>
+                                <div class="mb-4 p-3 border rounded" style="background-color: #ffffff;">
+                                    <p class="fw-bold mb-3 text-muted">Talleres a Inscribir:</p>
+                                    <div th:each="taller : ${talleres}"
+                                        class="form-check mb-2 d-flex justify-content-between align-items-center">
+                                        <th:block th:with="tieneHorarios=${!taller.horarios.isEmpty()}">
+                                            <div>
+                                                <input class="form-check-input taller-checkbox" type="checkbox"
+                                                    th:value="${taller.id}" th:id="'checkTaller' + ${taller.id}"
+                                                    th:data-target="'scheduleTaller' + ${taller.id}"
+                                                    th:data-taller-nombre="${taller.nombre}"
+                                                    name="talleresSeleccionados" th:disabled="${!tieneHorarios}">
+                                                <label class="form-check-label fw-medium"
+                                                    th:for="'checkTaller' + ${taller.id}"
+                                                    th:classappend="${!tieneHorarios} ? 'text-danger' : ''">
+                                                    <span th:text="${taller.nombre}">Nombre Taller</span>
+                                                    <span th:if="${!tieneHorarios}"
+                                                        class="small text-danger fw-bold ms-2">(No hay horarios
+                                                        disponibles)</span>
+                                                </label>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <div id="scheduleContainer" class="mt-4">
+                                    <div th:each="taller : ${talleres}" th:id="'scheduleTaller' + ${taller.id}"
+                                        th:data-taller-nombre="${taller.nombre}"
+                                        class="schedule-section card p-3 mb-3 d-none">
+                                        <h6 class="card-title text-primary"><i class="bi bi-clock-fill me-2"></i>Horario
+                                            para
+                                            <span th:text="${taller.nombre}">[Taller Nombre]</span>
+                                        </h6>
+                                        <p class="card-subtitle mb-2 text-muted small">Elige el horario semanal:</p>
+                                        <select class="form-select horario-select"
+                                            th:id="'selectHorario' + ${taller.id}"
+                                            th:name="'horarioTaller' + ${taller.id}" required disabled>
+                                            <option selected disabled value="">Selecciona un horario</option>
+                                            <option th:each="horario : ${taller.horarios}" th:value="${horario.id}">
+                                                <span th:text="${horario.diasDeClase}"></span>
+                                                <span
+                                                    th:text="'de ' + ${#temporals.format(horario.horaInicio, 'HH:mm')} + ' a ' + ${#temporals.format(horario.horaFin, 'HH:mm')}"></span>
+                                                <span
+                                                    th:text="' (Prof. ' + ${horario.profesor.nombreCompleto} + ' - Vacantes: ' + ${horario.vacantesDisponibles} + ')'"></span>
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle me-2"></i> Registrar Cliente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <section id="lista-clientes" class="mt-5">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-list-columns me-2"></i> Clientes Registrados</h3>
+            <div class="mb-3 d-flex">
+                <input type="text" class="form-control w-50" id="searchFilter"
+                    placeholder="Buscar por nombre, correo o teléfono...">
+                <button class="btn btn-secondary ms-2"><i class="bi bi-search"></i> Buscar</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre Completo</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Talleres Inscritos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cliente, iter : ${clientes}">
+                            <td th:text="${cliente.nombreCompleto}"></td>
+                            <td th:text="${cliente.user.email}"></td>
+                            <td th:text="${cliente.telefono}"></td>
+                            <td>
+                                <div th:if="${cliente.inscripciones.isEmpty()}">
+                                    <span class="text-muted small">No inscrito</span>
+                                </div>
+                                <th:block th:each="inscripcion : ${cliente.inscripciones}">
+                                    <span class="badge bg-primary me-1 my-1"
+                                        th:with="tallerNombre=${inscripcion.horario.taller.nombre}, dias=${inscripcion.horario.diasDeClase}, horaInicio=${#temporals.format(inscripcion.horario.horaInicio, 'HH:mm')}, horaFin=${#temporals.format(inscripcion.horario.horaFin, 'HH:mm')}">
+                                        <span th:text="${tallerNombre}"></span> (<span th:text="${dias}"></span> <span
+                                            th:text="${horaInicio + '-' + horaFin}"></span>)
+                                    </span>
+                                </th:block>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                    data-bs-target="#editModal" th:data-cliente-id="${cliente.id}"
+                                    th:data-cliente-nombre="${cliente.nombreCompleto}"
+                                    th:data-cliente-correo="${cliente.user.email}"
+                                    th:data-cliente-telefono="${cliente.telefono}">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" th:data-cliente-id="${cliente.id}"
+                                    th:data-cliente-nombre="${cliente.nombreCompleto}"
+                                    onclick="confirmBajaSegura(this)">
+                                    <i class="bi bi-x-circle"></i> Baja
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="editModalLabel"><i class="bi bi-pencil-square me-2"></i> Editar Datos
+                        Básicos del Cliente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form id="editClienteForm" th:action="@{/admin/clientes/editar}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="edit-cliente-id" name="id">
+                        <div class="alert alert-info small" role="alert">
+                            Al actualizar/editar el correo del cliente se generará una nueva contraseña
+                            temporal y se enviará un aviso de cambio a este nuevo correo.
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-nombre" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="edit-nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-correo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="edit-correo" name="correo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="edit-telefono" name="telefono" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Guardar
+                            Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <form id="formEliminarCliente" th:action="@{/admin/clientes/eliminar}" method="post" style="display: none;">
+        <input type="hidden" name="clienteId" id="eliminar-cliente-id">
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 🚀 CAMBIO 2: Nueva función más segura
+        function confirmBajaSegura(buttonElement) {
+            const clienteId = buttonElement.getAttribute('data-cliente-id');
+            const nombreCompleto = buttonElement.getAttribute('data-cliente-nombre');
+
+            if (confirm(`¿Estás seguro de que deseas eliminar completamente al cliente ${nombreCompleto} (ID: ${clienteId})? Esta acción es irreversible.`)) {
+                // 1. Poner el ID en el campo oculto del formulario
+                document.getElementById('eliminar-cliente-id').value = clienteId;
+
+                // 2. Enviar el formulario POST al AdminController
+                document.getElementById('formEliminarCliente').submit();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // --------------------------------------------------------------------------
+            // 1. Lógica para el formulario de REGISTRO (Manejo de checkboxes y selects)
+            // --------------------------------------------------------------------------
+
+            const checkboxes = document.querySelectorAll('.taller-checkbox');
+            const form = document.getElementById('registroClienteForm');
+            const validationAlert = document.getElementById('validationAlert');
+
+            const toggleSchedule = (checkbox) => {
+                const targetId = checkbox.dataset.target;
+                const scheduleDiv = document.getElementById(targetId);
+                const scheduleSelect = scheduleDiv ? scheduleDiv.querySelector('select') : null;
+
+                if (!scheduleDiv || !scheduleSelect) return;
+
+                if (checkbox.checked) {
+                    scheduleDiv.classList.remove('d-none');
+                    scheduleSelect.setAttribute('required', 'required');
+                    scheduleSelect.removeAttribute('disabled');
+                } else {
+                    scheduleDiv.classList.add('d-none');
+                    scheduleSelect.setAttribute('disabled', 'disabled');
+                    scheduleSelect.removeAttribute('required');
+                    scheduleSelect.value = ''; // Resetear el valor
+                }
+            };
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => toggleSchedule(checkbox));
+                toggleSchedule(checkbox);
+            });
+
+            form.addEventListener('submit', (event) => {
+                const checkedCount = document.querySelectorAll('.taller-checkbox:checked').length;
+                let validSelection = true;
+                let selectedTallerRequiresSchedule = false;
+
+                if (checkedCount > 0) {
+                    selectedTallerRequiresSchedule = true;
+                    document.querySelectorAll('.taller-checkbox:checked').forEach(checkbox => {
+                        const targetId = checkbox.dataset.target;
+                        const scheduleDiv = document.getElementById(targetId);
+                        if (scheduleDiv) {
+                            const scheduleSelect = scheduleDiv.querySelector('select');
+                            if (scheduleSelect.value === "") {
+                                validSelection = false;
+                                scheduleSelect.reportValidity();
+                            }
+                        }
+                    });
+                }
+
+                if (!validSelection && selectedTallerRequiresSchedule) {
+                    event.preventDefault();
+                    validationAlert.classList.remove('d-none');
+                    validationAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    validationAlert.classList.add('d-none');
+                }
+            });
+
+
+            // --------------------------------------------------------------------------
+            // 2. Lógica para el Modal de EDICIÓN DE CLIENTE
+            // --------------------------------------------------------------------------
+            const editModal = document.getElementById('editModal');
+            let originalEmail = ''; // Variable para almacenar el correo original
+
+            editModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                // Obtener datos del botón (usando data-attributes de Thymeleaf en la tabla)
+                const clientId = button.getAttribute('data-cliente-id');
+                const clientName = button.getAttribute('data-cliente-nombre');
+                const clientEmail = button.getAttribute('data-cliente-correo');
+                const clientPhone = button.getAttribute('data-cliente-telefono');
+
+                // Almacenar el correo original para la validación del backend
+                originalEmail = clientEmail;
+
+                // Llenar los campos del modal
+                document.getElementById('edit-cliente-id').value = clientId;
+                document.getElementById('edit-nombre').value = clientName;
+                document.getElementById('edit-correo').value = clientEmail;
+                document.getElementById('edit-telefono').value = clientPhone;
+            });
+
+            // Opcional: Agregar el correo original como campo oculto si prefieres enviarlo al backend
+            const editForm = document.getElementById('editClienteForm');
+            editForm.addEventListener('submit', function () {
+                // Se añade un campo oculto con el correo original antes de enviar el formulario
+                let originalEmailInput = document.getElementById('edit-original-correo');
+                if (!originalEmailInput) {
+                    originalEmailInput = document.createElement('input');
+                    originalEmailInput.type = 'hidden';
+                    originalEmailInput.id = 'edit-original-correo';
+                    originalEmailInput.name = 'originalCorreo';
+                    editForm.appendChild(originalEmailInput);
+                }
+                originalEmailInput.value = originalEmail;
+            });
+
+
+            // --------------------------------------------------------------------------
+            // 3. Lógica para el Modal de GESTIÓN DE TALLERES (+/- Taller)
+            // ¡ELIMINADA!
+            // --------------------------------------------------------------------------
+        });
+    </script>
+
+</body>
+
+</html>

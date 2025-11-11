@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos y Materiales - Panel de Gestión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/cliente-style.css}">
+    <link rel="stylesheet" th:href="@{/css/recursosAdmin-style.css}">
+</head>
+
+<body>
+    <div class="sidebar d-flex flex-column">
+        <div class="header-logo-dashboard">
+            <a class="d-flex align-items-center text-decoration-none text-white">
+                <img th:src="@{/images/logo.png}" alt="Logo Harmony" width="40" height="40" class="me-2">
+                <h1 class="h5 mb-0 fw-bold">Harmony</h1>
+            </a>
+        </div>
+        <div class="user-info">
+            <strong th:text="${nombreUsuario}">Admin Name</strong>
+        </div>
+        <nav class="nav flex-column">
+            <a th:href="@{/admin/clientes}" class="nav-link-item"><i class="bi bi-people me-2"></i> Clientes</a>
+            <a th:href="@{/admin/profesores}" class="nav-link-item"><i class="bi bi-person-badge me-2"></i>
+                Profesores</a>
+            <a th:href="@{/admin/talleres}" class="nav-link-item"><i class="bi bi-music-note-list me-2"></i> Talleres y
+                Horarios</a>
+            <a th:href="@{/admin/recursos}" class="nav-link-item active"><i class="bi bi-folder-fill me-2"></i> Recursos
+                y materiales</a>
+            <div class="mt-auto">
+                <a th:href="@{/}" class="nav-link-item nav-link-logout"><i class="bi bi-box-arrow-right me-2"></i>
+                    Cerrar Sesión</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <h1 class="mb-4 text-harmony-title">Gestión de Recursos y Materiales (Inventario)</h1>
+        <hr>
+
+        <section id="registro-recurso" class="mb-5 p-4 border rounded shadow-sm bg-light-purple">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-box-seam me-2"></i> Añadir Ítem al Inventario</h3>
+            <form th:action="@{/admin/recursos/anadir}" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3 text-secondary">Detalles del Material</h5>
+                        <div class="mb-3">
+                            <label for="nombreRecurso" class="form-label">Nombre del Ítem</label>
+                            <input type="text" class="form-control" id="nombreRecurso" name="nombre"
+                                placeholder="Ej: Atril para partituras" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="categoria" name="categoria" required>
+                                <option value="" disabled selected>Seleccione una categoría</option>
+                                <option value="Instrumento">Instrumento</option>
+                                <option value="Mobiliario">Mobiliario</option>
+                                <option value="Electrónica">Electrónica</option>
+                                <option value="Partituras">Partituras/Libros</option>
+                                <option value="Limpieza">Limpieza</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="cantidad" class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="mb-3 text-secondary">Asignación (Opcional)</h5>
+                        <div class="mb-3">
+                            <label for="tallerAsignado" class="form-label">Asignar a Taller</label>
+                            <select class="form-select" id="tallerAsignado" name="tallerId">
+                                <option value="" selected>No asignar (Almacén principal)</option>
+                                <option value="1">Guitarra Clásica</option>
+                                <option value="2">Canto Lírico</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="horarioAsignado" class="form-label">Asignar a Horario Específico</label>
+                            <select class="form-select" id="horarioAsignado" name="horarioId">
+                                <option value="" selected>No asignar (Asignado al Taller)</option>
+                                <option value="h1">Guitarra - Lun 18:00</option>
+                                <option value="h2">Canto - Mar 17:00</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-plus-circle me-2"></i>
+                        Registrar Ítem</button>
+                </div>
+            </form>
+        </section>
+
+        <hr>
+
+        <section id="lista-recursos" class="mt-5">
+            <h3 class="text-harmony-title mb-4"><i class="bi bi-clipboard-data me-2"></i> Inventario Actual</h3>
+            <div class="mb-3 d-flex align-items-center">
+                <input type="text" class="form-control w-50" id="searchFilterRecurso"
+                    placeholder="Buscar por nombre, ID o categoría...">
+                <button class="btn btn-secondary ms-2"><i class="bi bi-search"></i> Buscar</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Cantidad</th>
+                            <th>Asignado a</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="recurso : ${recursos}">
+                            <td th:text="${recurso.id}">INV001</td>
+                            <td th:text="${recurso.nombre}">Guitarra Acústica Yamaha</td>
+                            <td th:text="${recurso.categoria}">Instrumento</td>
+                            <td th:text="${recurso.cantidad}">5</td>
+                            <td><span class="badge bg-info text-dark">Guitarra Clásica (Lun 18:00)</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                    data-bs-target="#asignarModal" th:data-recurso-id="${recurso.id}">
+                                    <i class="bi bi-tag"></i> Asignar
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="retirarItem('INV001')">
+                                    <i class="bi bi-trash"></i> Retirar
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV002</td>
+                            <td>Libro de Solfeo Básico</td>
+                            <td>Partituras/Libros</td>
+                            <td>50</td>
+                            <td><span class="badge bg-secondary">Almacén Principal</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                    data-bs-target="#asignarModal" data-recurso-id="INV002">
+                                    <i class="bi bi-tag"></i> Asignar
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="retirarItem('INV002')">
+                                    <i class="bi bi-trash"></i> Retirar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="asignarModal" tabindex="-1" aria-labelledby="asignarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="asignarModalLabel">Asignar Recurso: <span
+                            id="modal-recurso-nombre">Guitarra Acústica</span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form th:action="@{/admin/recursos/asignar}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="asignar-recurso-id" name="recursoId">
+                        <p class="text-muted">Asigne este material a un taller o un horario específico.</p>
+                        <div class="mb-3">
+                            <label for="asignar-taller" class="form-label">Taller Destino</label>
+                            <select class="form-select" id="asignar-taller" name="tallerId">
+                                <option value="" selected>Quitar asignación (Almacén principal)</option>
+                                <option value="1">Guitarra Clásica</option>
+                                <option value="2">Canto Lírico</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="asignar-horario" class="form-label">Horario Específico</label>
+                            <select class="form-select" id="asignar-horario" name="horarioId">
+                                <option value="" selected>Todo el Taller / No Específico</option>
+                                <option value="h1">Guitarra - Lun 18:00</option>
+                                <option value="h2">Guitarra - Mié 19:00</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="asignar-cantidad" class="form-label">Cantidad a Asignar</label>
+                            <input type="number" class="form-control" id="asignar-cantidad" name="cantidad" min="1"
+                                required>
+                            <small class="form-text text-muted">Disponible: <span id="disponible-cantidad">5</span>
+                                unidades.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle me-1"></i> Confirmar
+                            Asignación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function retirarItem(itemId) {
+            const cantidad = prompt(`¿Cuántas unidades del ítem ${itemId} desea retirar del inventario?`);
+            if (cantidad && !isNaN(parseInt(cantidad))) {
+                alert(`Simulación: Retiradas ${cantidad} unidades del ítem ${itemId}.`);
+            } else if (cantidad !== null) {
+                alert('Por favor, ingrese una cantidad numérica válida.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const asignarModal = document.getElementById('asignarModal');
+            asignarModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const recursoId = button.getAttribute('data-recurso-id');
+                const data = {
+                    id: recursoId,
+                    nombre: recursoId === 'INV001' ? 'Guitarra Acústica Yamaha' : 'Libro de Solfeo Básico',
+                    disponible: recursoId === 'INV001' ? 5 : 50
+                };
+                document.getElementById('asignar-recurso-id').value = data.id;
+                document.getElementById('modal-recurso-nombre').textContent = data.nombre;
+                document.getElementById('disponible-cantidad').textContent = data.disponible;
+                document.getElementById('asignar-cantidad').max = data.disponible;
+            });
+        });
+    </script>
+</body>
+
+</html>
