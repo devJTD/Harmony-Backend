@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/**").permitAll() // ⬅️ AÑADE ESTA LÍNEA
 
                         // Restringe el acceso a /admin/ a usuarios con el rol ADMIN.
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").permitAll()
                         // Restringe el acceso a /horario y /cambiar-clave a CLIENTE o PROFESOR.
                         .requestMatchers("/horario", "/cambiar-clave").hasAnyRole("CLIENTE", "PROFESOR")
 
