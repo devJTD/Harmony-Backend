@@ -4,11 +4,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-
-# Archivos de configuración sensibles
-src/main/resources/application.properties
-src/main/resources/application.yml
-
 ### STS ###
 .apt_generated
 .classpath
