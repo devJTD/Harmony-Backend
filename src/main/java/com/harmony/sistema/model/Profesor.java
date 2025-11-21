@@ -3,7 +3,6 @@ package com.harmony.sistema.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +43,5 @@ public class Profesor {
     private User user;
 
     @OneToMany(mappedBy = "profesor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "profesor-horarios")
     private List<Horario> horariosImpartidos;
 }
