@@ -123,6 +123,14 @@ public class HorarioService {
         }
         System.out.println("✅ [HORARIO SERVICE] Validación de unicidad completada (no hay conflicto).");
 
+        // ✅ CÁLCULO AUTOMÁTICO DE FECHA FIN
+        // Fecha Fin = Fecha Inicio + (Duración en Semanas * 7 días)
+        // Restamos 1 día si queremos que termine exactamente al final de la última
+        // semana (opcional, pero común)
+        // Aquí usaremos la lógica simple: inicio + duración
+        int diasDuracion = taller.getDuracionSemanas() * 7;
+        LocalDate fechaFinCalculada = fechaInicio.plusDays(diasDuracion);
+
         Horario nuevoHorario = Horario.builder()
                 .taller(taller)
                 .profesor(profesor)
@@ -130,6 +138,7 @@ public class HorarioService {
                 .horaInicio(horaInicio)
                 .horaFin(horaFin)
                 .fechaInicio(fechaInicio)
+                .fechaFin(fechaFinCalculada) // ✅ Asignamos la fecha calculada
                 .vacantesDisponibles(vacantesDisponibles)
                 .build();
 
@@ -156,11 +165,16 @@ public class HorarioService {
         }
         System.out.println("✅ [HORARIO SERVICE] Nuevo Profesor validado.");
 
+        // ✅ CÁLCULO AUTOMÁTICO DE FECHA FIN EN EDICIÓN
+        int diasDuracion = horario.getTaller().getDuracionSemanas() * 7;
+        LocalDate fechaFinCalculada = fechaInicio.plusDays(diasDuracion);
+
         horario.setProfesor(nuevoProfesor);
         horario.setDiasDeClase(diasDeClase);
         horario.setHoraInicio(horaInicio);
         horario.setHoraFin(horaFin);
         horario.setFechaInicio(fechaInicio);
+        horario.setFechaFin(fechaFinCalculada); // ✅ Actualizamos fecha fin
         horario.setVacantesDisponibles(vacantesDisponibles);
         System.out.println("📝 [HORARIO SERVICE] Campos del horario actualizados.");
 
