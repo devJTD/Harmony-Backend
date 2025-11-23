@@ -17,37 +17,39 @@ import com.harmony.sistema.model.Taller;
 @Repository
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
 
-    // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor
-    @Query("SELECT h FROM Horario h LEFT JOIN FETCH h.profesor WHERE h.profesor.user.email = :email")
-    List<Horario> findByProfesorUserEmail(@Param("email") String email);
+        // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor
+        @Query("SELECT h FROM Horario h LEFT JOIN FETCH h.profesor WHERE h.profesor.user.email = :email")
+        List<Horario> findByProfesorUserEmail(@Param("email") String email);
 
-    // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor y taller
-    @Query("SELECT DISTINCT h FROM Horario h " +
-            "LEFT JOIN FETCH h.profesor " +
-            "LEFT JOIN FETCH h.taller " +
-            "JOIN h.inscripciones i " +
-            "WHERE i.cliente.user.email = :email")
-    List<Horario> findByInscripcionesClienteUserEmail(@Param("email") String email);
+        // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor y taller
+        @Query("SELECT DISTINCT h FROM Horario h " +
+                        "LEFT JOIN FETCH h.profesor " +
+                        "LEFT JOIN FETCH h.taller " +
+                        "JOIN h.inscripciones i " +
+                        "WHERE i.cliente.user.email = :email")
+        List<Horario> findByInscripcionesClienteUserEmail(@Param("email") String email);
 
-    // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor
-    @Query("SELECT h FROM Horario h " +
-            "LEFT JOIN FETCH h.profesor " +
-            "WHERE h.taller.id = :tallerId " +
-            "AND h.fechaInicio > :fecha " +
-            "AND h.vacantesDisponibles > :vacantes")
-    List<Horario> findByTallerIdAndFechaInicioAfterAndVacantesDisponiblesGreaterThan(
-            @Param("tallerId") Long tallerId,
-            @Param("fecha") LocalDate fecha,
-            @Param("vacantes") Integer vacantes);
+        // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor
+        @Query("SELECT h FROM Horario h " +
+                        "LEFT JOIN FETCH h.profesor " +
+                        "WHERE h.taller.id = :tallerId " +
+                        "AND h.fechaInicio > :fecha " +
+                        "AND h.vacantesDisponibles > :vacantes")
+        List<Horario> findByTallerIdAndFechaInicioAfterAndVacantesDisponiblesGreaterThan(
+                        @Param("tallerId") Long tallerId,
+                        @Param("fecha") LocalDate fecha,
+                        @Param("vacantes") Integer vacantes);
 
-    // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor
-    @Query("SELECT h FROM Horario h LEFT JOIN FETCH h.profesor WHERE h.taller.id = :tallerId")
-    List<Horario> findByTallerId(@Param("tallerId") Long tallerId);
+        // ✅ CORREGIDO: Agregar FETCH JOIN para cargar el profesor
+        @Query("SELECT h FROM Horario h LEFT JOIN FETCH h.profesor WHERE h.taller.id = :tallerId")
+        List<Horario> findByTallerId(@Param("tallerId") Long tallerId);
 
-    Optional<Horario> findByTallerAndProfesorAndDiasDeClaseAndHoraInicioAndHoraFin(
-            Taller taller,
-            Profesor profesor,
-            String diasDeClase,
-            LocalTime horaInicio,
-            LocalTime horaFin);
+        Optional<Horario> findByTallerAndProfesorAndDiasDeClaseAndHoraInicioAndHoraFin(
+                        Taller taller,
+                        Profesor profesor,
+                        String diasDeClase,
+                        LocalTime horaInicio,
+                        LocalTime horaFin);
+
+        List<Horario> findByFinalizadoFalseAndFechaFinBefore(LocalDate fecha);
 }
