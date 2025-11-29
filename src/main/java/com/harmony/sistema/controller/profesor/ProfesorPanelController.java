@@ -1,4 +1,4 @@
-package com.harmony.sistema.controller;
+package com.harmony.sistema.controller.profesor;
 
 import com.harmony.sistema.dto.CambioClaveRequest; // Importado el nuevo DTO
 import com.harmony.sistema.dto.HorarioProfesorDTO; // Importado el nuevo DTO

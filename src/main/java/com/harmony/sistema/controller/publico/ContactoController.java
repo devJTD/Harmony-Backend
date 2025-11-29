@@ -1,4 +1,4 @@
-package com.harmony.sistema.controller;
+package com.harmony.sistema.controller.publico;
 
 import java.util.HashMap;
 import java.util.Map;

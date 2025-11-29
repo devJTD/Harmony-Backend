@@ -1,4 +1,4 @@
-package com.harmony.sistema.controller;
+package com.harmony.sistema.controller.cliente;
 
 import com.harmony.sistema.dto.CambioClaveRequest;
 import com.harmony.sistema.dto.HorarioClienteDTO;

@@ -1,4 +1,4 @@
-package com.harmony.sistema.controller;
+package com.harmony.sistema.controller.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.harmony.sistema.controller;
+package com.harmony.sistema.controller.shared;
 
 import java.io.IOException;
 import java.nio.file.Files;

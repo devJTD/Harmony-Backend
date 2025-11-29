@@ -1,4 +1,4 @@
-package com.harmony.sistema.controller;
+package com.harmony.sistema.controller.publico;
 
 import com.harmony.sistema.model.Noticia;
 import com.harmony.sistema.service.BlogService;
