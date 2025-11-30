@@ -21,37 +21,36 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
-    // Define el servicio para cargar detalles de usuario por email desde la BD
+    // Servicio para cargar detalles de usuario por email
     @Bean
     public UserDetailsService userDetailsService() {
         System.out.println(" [CONFIG] Inicializando Bean: UserDetailsService (Cargador de usuarios por Email)");
-        // Busca el usuario por email o lanza excepción si no se encuentra
+        // Busca usuario por email o lanza excepción
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
 
-    // Configura el proveedor de autenticación con el servicio de usuarios y
-    // codificador de contraseñas
+    // Configura el proveedor de autenticación
     @SuppressWarnings("deprecation")
     @Bean
     public AuthenticationProvider authenticationProvider() {
         System.out.println(" [CONFIG] Inicializando Bean: AuthenticationProvider (DaoAuthenticationProvider)");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        // Asigna el servicio de detalles de usuario y el encriptador de contraseñas
+        // Asigna servicio de usuarios y encriptador
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
-    // Expone el gestor de autenticación de la configuración global
+    // Gestor de autenticación global
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         System.out.println(" [CONFIG] Inicializando Bean: AuthenticationManager");
-        // Obtiene y retorna el AuthenticationManager
+        // Retorna el AuthenticationManager
         return config.getAuthenticationManager();
     }
 
-    // Define el codificador de contraseñas usando BCrypt
+    // Codificador de contraseñas BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         System.out.println(" [CONFIG] Inicializando Bean: PasswordEncoder (BCrypt)");

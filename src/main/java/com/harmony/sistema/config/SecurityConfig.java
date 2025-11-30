@@ -33,7 +33,7 @@ public class SecurityConfig {
         System.out.println(" [CONFIG] Inicializando Bean: SecurityFilterChain (Configuración de Seguridad HTTP)");
 
         http
-                // Deshabilita CSRF y configura autorización de rutas
+                // Deshabilita CSRF y configura autorización
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/horario", "/cambiar-clave").hasAnyRole("CLIENTE", "PROFESOR")
                         .anyRequest().authenticated())
 
-                // Configura proveedor de autenticación y filtro JWT
+                // Configura proveedor y filtro JWT
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
@@ -66,7 +66,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Maneja la redirección post-login según el rol del usuario
+    // Maneja redirección post-login según rol
     @Bean
     public AuthenticationSuccessHandler mySuccessHandler() {
         System.out

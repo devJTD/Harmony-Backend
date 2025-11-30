@@ -49,20 +49,20 @@ public class DataInitializer implements CommandLineRunner {
                 this.passwordEncoder = passwordEncoder;
         }
 
-        // Ejecuta la inicialización de datos al arrancar la aplicación
+        // Inicialización de datos al arrancar
         @Override
         @Transactional
         public void run(String... args) throws Exception {
                 System.out.println("--- INICIANDO CONFIGURACIÓN INICIAL DE HARMONY ---");
 
-                // Inicializa roles y usuario administrador
+                // Inicializa roles y usuarios
                 Role adminRole = initializeRole(ROLE_ADMIN);
                 Role profesorRole = initializeRole(ROLE_PROFESOR);
                 initializeRole(ROLE_CLIENTE);
 
                 initializeAdminUser(adminRole);
 
-                // 3. Inicializa los profesores.
+                // Inicializa profesores
                 Profesor juanPerez = initializeProfesor("Juan Perez", "987654321", profesorRole,
                                 "/images/profesorPiano.jpg",
                                 "\"La música es el lenguaje universal que conecta corazones. Enseñar piano no es solo transmitir técnica, es despertar la pasión por crear melodías que expresan lo que las palabras no pueden. Cada alumno es único y mi misión es ayudarles a descubrir su propia voz musical.\"");
@@ -81,7 +81,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 System.out.println("Profesores inicializados/verificados.");
 
-                // 4. Inicializa los talleres.
+                // Inicializa talleres
                 Taller piano = initializeTaller(
                                 "Piano",
                                 "Aprende las bases del piano desde cero en un curso diseñado para principiantes que desean familiarizarse con el instrumento y desarrollar coordinación, lectura musical y ejecución de melodías sencillas.",
@@ -124,8 +124,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 System.out.println("Talleres inicializados/verificados.");
 
-                // 5. Inicializa los horarios para los talleres, algunos ya iniciados (minus) y
-                // otros por iniciar (plus).
+                // Inicializa horarios
                 LocalDate hoy = LocalDate.now();
 
                 initializeHorario(piano, juanPerez, "Lunes, Miércoles", "16:00", "18:00", VACANTES_DEFAULT,
@@ -155,7 +154,7 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("--- CONFIGURACIÓN INICIAL DE HARMONY FINALIZADA ---");
         }
 
-        // Busca un rol por nombre o lo crea si no existe
+        // Busca o crea un rol
         private Role initializeRole(String roleName) {
                 return roleRepository.findByName(roleName)
                                 .orElseGet(() -> {
@@ -165,7 +164,7 @@ public class DataInitializer implements CommandLineRunner {
                                 });
         }
 
-        // Crea el usuario admin si no existe
+        // Crea usuario admin si no existe
         private void initializeAdminUser(Role adminRole) {
                 if (!userRepository.findByEmail("admin@harmony.com").isPresent()) {
                         Set<Role> adminRoles = new HashSet<>();
@@ -181,7 +180,7 @@ public class DataInitializer implements CommandLineRunner {
                 }
         }
 
-        // Inicializa un profesor y su usuario asociado si no existen
+        // Inicializa profesor y usuario asociado
         private Profesor initializeProfesor(String nombre, String telefono, Role profesorRole, String fotoUrl,
                         String informacion) {
                 Optional<Profesor> existingProfesor = profesorRepository.findByNombreCompleto(nombre);
@@ -198,7 +197,7 @@ public class DataInitializer implements CommandLineRunner {
                                 .build();
                 userRepository.save(user);
 
-                // Crea entidad profesor vinculada al usuario
+                // Crea entidad profesor
                 Profesor profesor = Profesor.builder()
                                 .nombreCompleto(nombre)
                                 .telefono(telefono)
@@ -210,7 +209,7 @@ public class DataInitializer implements CommandLineRunner {
                 return profesorRepository.save(profesor);
         }
 
-        // Busca un taller por nombre o lo crea si no existe
+        // Busca o crea un taller
         private Taller initializeTaller(String nombre, String descripcion, Integer duracionSemanas,
                         Integer clasesPorSemana,
                         String imagenTaller, String imagenInicio, String temas, BigDecimal precio) {
@@ -233,14 +232,14 @@ public class DataInitializer implements CommandLineRunner {
                                 });
         }
 
-        // Inicializa un horario si no existe conflicto
+        // Inicializa horario si no existe conflicto
         private Horario initializeHorario(Taller taller, Profesor profesor, String dias, String horaInicio,
                         String horaFin,
                         int vacantes, LocalDate fechaInicio) {
                 LocalTime inicio = LocalTime.parse(horaInicio);
                 LocalTime fin = LocalTime.parse(horaFin);
 
-                // Verifica si ya existe el horario
+                // Verifica existencia de horario
                 Optional<Horario> existingHorario = horarioRepository
                                 .findByTallerAndProfesorAndDiasDeClaseAndHoraInicioAndHoraFin(
                                                 taller, profesor, dias, inicio, fin);
@@ -252,7 +251,7 @@ public class DataInitializer implements CommandLineRunner {
                         return existingHorario.get();
                 }
 
-                // Crea y guarda el nuevo horario
+                // Crea y guarda nuevo horario
                 long diasDuracion = (long) taller.getDuracionSemanas() * 7;
                 LocalDate fechaFinCalculada = fechaInicio.plusDays(diasDuracion);
 
