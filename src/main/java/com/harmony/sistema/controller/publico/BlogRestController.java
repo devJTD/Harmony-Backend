@@ -19,19 +19,28 @@ public class BlogRestController {
         this.blogService = blogService;
     }
 
-    // Obtener todas las noticias
+    /**
+     * Endpoint para obtener todas las noticias.
+     * GET /api/blog
+     */
     @GetMapping
     public List<Noticia> getAllNoticias() {
         return blogService.getAllNoticias();
     }
 
-    // Obtener una noticia por ID
+    /**
+     * Endpoint para obtener una noticia por ID.
+     * GET /api/blog/{id}
+     */
     @GetMapping("/{id}")
     public Noticia getNoticiaById(@PathVariable Long id) {
         return blogService.getNoticiaById(id);
     }
 
-    // Agregar una nueva noticia (opcional)
+    /**
+     * Endpoint para agregar una nueva noticia.
+     * POST /api/blog
+     */
     @PostMapping
     public Noticia createNoticia(@RequestBody Noticia noticia) {
         return blogService.saveNoticia(noticia);

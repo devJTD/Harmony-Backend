@@ -30,7 +30,8 @@ public class ProfesorPanelController {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * Obtiene los horarios asignados al profesor autenticado
+     * Endpoint para obtener los horarios asignados al profesor autenticado.
+     * GET /api/profesor/horarios
      */
     @GetMapping("/horarios")
     public ResponseEntity<List<HorarioProfesorDTO>> getHorarios(Authentication authentication) {
@@ -58,7 +59,8 @@ public class ProfesorPanelController {
     }
 
     /**
-     * Cambio de contraseña del profesor
+     * Endpoint para cambiar la contraseña del profesor.
+     * POST /api/profesor/cambiar-clave
      */
     @PostMapping("/cambiar-clave")
     public ResponseEntity<String> cambiarClave(
@@ -87,6 +89,10 @@ public class ProfesorPanelController {
     @Autowired
     private com.harmony.sistema.service.ProfesorService profesorService;
 
+    /**
+     * Endpoint para cancelar una clase específica.
+     * POST /api/profesor/cancelar-clase/{horarioId}
+     */
     @PostMapping("/cancelar-clase/{horarioId}")
     public ResponseEntity<?> cancelarClase(@PathVariable Long horarioId,
             @RequestBody com.harmony.sistema.model.ClaseCancelada claseCancelada) {

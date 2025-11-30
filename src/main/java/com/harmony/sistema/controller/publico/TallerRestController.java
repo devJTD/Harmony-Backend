@@ -31,10 +31,10 @@ public class TallerRestController {
 
     /**
      * Endpoint para obtener la lista de talleres activos con sus horarios abiertos.
+     * GET /api/talleres/detallados/activos
      * 
      * @return Lista de objetos Taller, cada uno enriquecido con su lista de
-     *         horariosAbiertos
-     *         y el indicador tieneHorariosDefinidos.
+     *         horariosAbiertos y el indicador tieneHorariosDefinidos.
      */
     @GetMapping("/detallados/activos")
     public List<TallerResponseDTO> getTalleresDetalladosActivos() {

@@ -19,6 +19,10 @@ public class IndexRestController {
     @Autowired
     private TallerService tallerService;
 
+    /**
+     * Endpoint para obtener talleres activos.
+     * GET /api/talleres/activos
+     */
     @GetMapping("/activos")
     public List<Taller> getTalleresActivos() {
         System.out.println(" [API REQUEST] Solicitud GET a /api/talleres/activos. Devolviendo JSON.");

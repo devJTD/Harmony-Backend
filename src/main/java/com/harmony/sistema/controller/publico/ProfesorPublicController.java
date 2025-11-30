@@ -20,6 +20,10 @@ public class ProfesorPublicController {
     @Autowired
     private ProfesorService profesorService;
 
+    /**
+     * Endpoint para listar todos los profesores.
+     * GET /api/profesores
+     */
     @GetMapping
     public List<Profesor> listarProfesores() {
         System.out.println(" [REST REQUEST] Solicitud GET a /api/profesores. Devolviendo lista de profesores.");

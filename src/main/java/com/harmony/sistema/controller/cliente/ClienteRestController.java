@@ -31,7 +31,8 @@ public class ClienteRestController {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * Obtiene los horarios del cliente autenticado
+     * Endpoint para obtener los horarios del cliente autenticado.
+     * GET /api/cliente/horarios
      */
     @GetMapping("/horarios")
     public ResponseEntity<List<HorarioClienteDTO>> getHorarios(Authentication authentication) {
@@ -75,7 +76,8 @@ public class ClienteRestController {
     }
 
     /**
-     * Cambio de contraseña del cliente
+     * Endpoint para cambiar la contraseña del cliente.
+     * POST /api/cliente/cambiar-clave
      */
     @PostMapping("/cambiar-clave")
     public ResponseEntity<String> cambiarClave(

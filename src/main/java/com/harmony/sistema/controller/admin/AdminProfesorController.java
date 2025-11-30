@@ -36,7 +36,8 @@ public class AdminProfesorController {
     private ProfesorService profesorService;
 
     /**
-     * GET: Lista todos los profesores
+     * Endpoint para listar todos los profesores.
+     * GET /api/admin/profesores
      */
     @GetMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -71,7 +72,8 @@ public class AdminProfesorController {
     }
 
     /**
-     * POST: Registra un nuevo profesor
+     * Endpoint para registrar un nuevo profesor.
+     * POST /api/admin/profesores
      */
     @PostMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -103,7 +105,8 @@ public class AdminProfesorController {
     }
 
     /**
-     * PUT: Edita un profesor existente
+     * Endpoint para editar un profesor existente.
+     * PUT /api/admin/profesores/{id}
      */
     @PutMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -137,7 +140,8 @@ public class AdminProfesorController {
     }
 
     /**
-     * DELETE: Elimina un profesor
+     * Endpoint para eliminar un profesor.
+     * DELETE /api/admin/profesores/{id}
      */
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")

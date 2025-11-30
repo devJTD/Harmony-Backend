@@ -48,7 +48,8 @@ public class AdminClienteController {
     private TallerService tallerService;
 
     /**
-     * GET: Lista todos los clientes con sus inscripciones activas
+     * Endpoint para listar todos los clientes con sus inscripciones activas.
+     * GET /api/admin/clientes
      */
     @GetMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -112,7 +113,9 @@ public class AdminClienteController {
     }
 
     /**
-     * GET: Obtiene talleres con horarios disponibles (no iniciados y con vacantes)
+     * Endpoint para obtener talleres con horarios disponibles (no iniciados y con
+     * vacantes).
+     * GET /api/admin/clientes/talleres-disponibles
      */
     @GetMapping("/talleres-disponibles")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -152,7 +155,8 @@ public class AdminClienteController {
     }
 
     /**
-     * POST: Registra un nuevo cliente con inscripciones a talleres
+     * Endpoint para registrar un nuevo cliente con inscripciones a talleres.
+     * POST /api/admin/clientes
      */
     @PostMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -203,7 +207,8 @@ public class AdminClienteController {
     }
 
     /**
-     * PUT: Edita un cliente existente
+     * Endpoint para editar un cliente existente.
+     * PUT /api/admin/clientes/{id}
      */
     @PutMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -252,7 +257,8 @@ public class AdminClienteController {
     }
 
     /**
-     * DELETE: Elimina un cliente
+     * Endpoint para eliminar un cliente.
+     * DELETE /api/admin/clientes/{id}
      */
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -279,7 +285,8 @@ public class AdminClienteController {
     }
 
     /**
-     * POST: Agrega una inscripción a un cliente existente
+     * Endpoint para agregar una inscripción a un cliente existente.
+     * POST /api/admin/clientes/{id}/inscripciones
      */
     @PostMapping("/{id}/inscripciones")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -311,7 +318,8 @@ public class AdminClienteController {
     }
 
     /**
-     * DELETE: Elimina una inscripción específica de un cliente
+     * Endpoint para eliminar una inscripción específica de un cliente.
+     * DELETE /api/admin/clientes/{id}/inscripciones/{horarioId}
      */
     @DeleteMapping("/{id}/inscripciones/{horarioId}")
     @SuppressWarnings("CallToPrintStackTrace")

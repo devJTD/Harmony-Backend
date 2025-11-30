@@ -28,7 +28,9 @@ public class FileUploadController {
     private static final String UPLOAD_DIR = "src/main/resources/static/images/";
 
     /**
-     * ✅ Lista todos los archivos disponibles en la carpeta de imágenes
+     * Endpoint para listar todos los archivos disponibles en la carpeta de
+     * imágenes.
+     * GET /api/upload/images-list
      */
     @GetMapping("/images-list")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -76,7 +78,8 @@ public class FileUploadController {
     }
 
     /**
-     * ✅ CORREGIDO: Sube archivo manteniendo el nombre ORIGINAL sin UUID
+     * Endpoint para subir un archivo de imagen.
+     * POST /api/upload/image
      */
     @PostMapping("/image")
     @SuppressWarnings("CallToPrintStackTrace")

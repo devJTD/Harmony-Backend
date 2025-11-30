@@ -33,7 +33,8 @@ public class AdminTallerController {
     private TallerService tallerService;
 
     /**
-     * GET: Lista todos los talleres
+     * Endpoint para listar todos los talleres.
+     * GET /api/admin/talleres
      */
     @GetMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -51,7 +52,8 @@ public class AdminTallerController {
     }
 
     /**
-     * GET: Lista talleres activos
+     * Endpoint para listar talleres activos.
+     * GET /api/admin/talleres/activos
      */
     @GetMapping("/activos")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -69,7 +71,8 @@ public class AdminTallerController {
     }
 
     /**
-     * POST: Registra un nuevo taller
+     * Endpoint para registrar un nuevo taller.
+     * POST /api/admin/talleres
      */
     @PostMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -119,7 +122,8 @@ public class AdminTallerController {
     }
 
     /**
-     * PUT: Edita un taller existente
+     * Endpoint para editar un taller existente.
+     * PUT /api/admin/talleres/{id}
      */
     @PutMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -173,7 +177,8 @@ public class AdminTallerController {
     }
 
     /**
-     * DELETE: Elimina un taller
+     * Endpoint para eliminar un taller.
+     * DELETE /api/admin/talleres/{id}
      */
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")

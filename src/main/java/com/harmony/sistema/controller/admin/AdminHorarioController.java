@@ -34,7 +34,8 @@ public class AdminHorarioController {
     private HorarioService horarioService;
 
     /**
-     * GET: Obtiene un horario por ID
+     * Endpoint para obtener un horario por ID.
+     * GET /api/admin/horarios/{id}
      */
     @GetMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -53,7 +54,8 @@ public class AdminHorarioController {
     }
 
     /**
-     * POST: Registra un nuevo horario
+     * Endpoint para registrar un nuevo horario.
+     * POST /api/admin/horarios
      */
     @PostMapping
     @SuppressWarnings("CallToPrintStackTrace")
@@ -105,7 +107,8 @@ public class AdminHorarioController {
     }
 
     /**
-     * PUT: Edita un horario existente
+     * Endpoint para editar un horario existente.
+     * PUT /api/admin/horarios/{id}
      */
     @PutMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
@@ -147,7 +150,8 @@ public class AdminHorarioController {
     }
 
     /**
-     * DELETE: Elimina un horario
+     * Endpoint para eliminar un horario.
+     * DELETE /api/admin/horarios/{id}
      */
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")

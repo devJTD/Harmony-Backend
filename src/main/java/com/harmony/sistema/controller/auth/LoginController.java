@@ -7,12 +7,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class LoginController {
 
+    /**
+     * Endpoint para mostrar el formulario de login.
+     * GET /login
+     */
     @GetMapping("/login")
     public String showLoginForm() {
         System.out.println(" [REQUEST] Mapeando solicitud GET a /login. Retornando vista del formulario 'login'.");
         return "login";
     }
 
+    /**
+     * Endpoint para procesar el login (manejado por Spring Security).
+     * POST /login
+     */
     @PostMapping("/login")
     public String processLogin() {
         System.out.println(" [REQUEST] Mapeando solicitud POST a /login. Spring Security procesará la autenticación.");
