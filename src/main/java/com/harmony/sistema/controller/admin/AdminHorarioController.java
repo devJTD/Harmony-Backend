@@ -40,14 +40,14 @@ public class AdminHorarioController {
     @GetMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Horario> obtenerHorario(@PathVariable Long id) {
-        System.out.println("🔵 [API ADMIN] GET /api/admin/horarios/" + id + " - Obteniendo horario");
+        System.out.println("[INFO] [CONTROLLER] GET /api/admin/horarios/" + id + " - Obteniendo horario");
 
         try {
             Horario horario = horarioService.getHorarioById(id);
-            System.out.println("✅ [API ADMIN SUCCESS] Horario obtenido: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Horario obtenido: " + id);
             return ResponseEntity.ok(horario);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Horario no encontrado: " + id);
+            System.err.println("[ERROR] [CONTROLLER] Horario no encontrado: " + id);
             e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
@@ -68,10 +68,10 @@ public class AdminHorarioController {
             @RequestParam("fechaInicio") LocalDate fechaInicio,
             @RequestParam("vacantesDisponibles") int vacantesDisponibles) {
 
-        System.out.println("🔵 [API ADMIN] POST /api/admin/horarios - Registrando horario");
-        System.out.println("🎓 [API ADMIN] Taller ID: " + tallerId);
-        System.out.println("👨‍🏫 [API ADMIN] Profesor ID: " + profesorId);
-        System.out.println("📅 [API ADMIN] Fecha inicio: " + fechaInicio);
+        System.out.println("[INFO] [CONTROLLER] POST /api/admin/horarios - Registrando horario");
+        System.out.println("[INFO] [CONTROLLER] Taller ID: " + tallerId);
+        System.out.println("👨‍🏫 [CONTROLLER] Profesor ID: " + profesorId);
+        System.out.println("📅 [CONTROLLER] Fecha inicio: " + fechaInicio);
 
         try {
             String diasDeClase = (diasDeClaseArray != null && diasDeClaseArray.length > 0)
@@ -79,7 +79,7 @@ public class AdminHorarioController {
                     : "";
 
             if (diasDeClase.isEmpty()) {
-                System.out.println("⚠️ [API ADMIN] No se seleccionaron días de clase");
+                System.out.println("[WARN] [CONTROLLER] No se seleccionaron días de clase");
                 Map<String, Object> errorResponse = new HashMap<>();
                 errorResponse.put("success", false);
                 errorResponse.put("message", "Debe seleccionar al menos un día de clase");
@@ -94,10 +94,10 @@ public class AdminHorarioController {
             response.put("message", "Horario creado exitosamente");
             response.put("horario", nuevoHorario);
 
-            System.out.println("✅ [API ADMIN SUCCESS] Horario registrado con ID: " + nuevoHorario.getId());
+            System.out.println("[SUCCESS] [CONTROLLER] Horario registrado con ID: " + nuevoHorario.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al registrar horario: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al registrar horario: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -121,7 +121,7 @@ public class AdminHorarioController {
             @RequestParam("fechaInicio") LocalDate fechaInicio,
             @RequestParam("vacantesDisponibles") int vacantesDisponibles) {
 
-        System.out.println("🔵 [API ADMIN] PUT /api/admin/horarios/" + id + " - Editando horario");
+        System.out.println("[INFO] [CONTROLLER] PUT /api/admin/horarios/" + id + " - Editando horario");
 
         try {
             if (horaFin == null) {
@@ -137,10 +137,10 @@ public class AdminHorarioController {
             response.put("message", "Horario actualizado exitosamente");
             response.put("horario", horarioActualizado);
 
-            System.out.println("✅ [API ADMIN SUCCESS] Horario actualizado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Horario actualizado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al editar horario: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al editar horario: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -156,7 +156,7 @@ public class AdminHorarioController {
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Map<String, Object>> eliminarHorario(@PathVariable Long id) {
-        System.out.println("🔵 [API ADMIN] DELETE /api/admin/horarios/" + id + " - Eliminando horario");
+        System.out.println("[INFO] [CONTROLLER] DELETE /api/admin/horarios/" + id + " - Eliminando horario");
 
         try {
             horarioService.eliminarHorario(id);
@@ -165,10 +165,10 @@ public class AdminHorarioController {
             response.put("success", true);
             response.put("message", "Horario eliminado exitosamente");
 
-            System.out.println("✅ [API ADMIN SUCCESS] Horario eliminado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Horario eliminado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al eliminar horario: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al eliminar horario: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);

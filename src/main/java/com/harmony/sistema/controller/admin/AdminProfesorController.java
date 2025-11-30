@@ -42,7 +42,7 @@ public class AdminProfesorController {
     @GetMapping
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<List<Map<String, Object>>> listarProfesores() {
-        System.out.println("🔵 [API ADMIN] GET /api/admin/profesores - Listando profesores");
+        System.out.println("[INFO] [CONTROLLER] GET /api/admin/profesores - Listando profesores");
         try {
             List<Profesor> profesores = profesorService.listarProfesores();
 
@@ -57,15 +57,15 @@ public class AdminProfesorController {
                 String correo = profesor.getUser() != null ? profesor.getUser().getEmail() : "";
                 profesorMap.put("correo", correo);
 
-                System.out.println("👨‍🏫 [API ADMIN] Profesor ID " + profesor.getId() + " - Correo: " + correo);
+                System.out.println("👨‍🏫 [CONTROLLER] Profesor ID " + profesor.getId() + " - Correo: " + correo);
 
                 return profesorMap;
             }).collect(Collectors.toList());
 
-            System.out.println("✅ [API ADMIN SUCCESS] " + profesoresConCorreo.size() + " profesores obtenidos");
+            System.out.println("[SUCCESS] [CONTROLLER] " + profesoresConCorreo.size() + " profesores obtenidos");
             return ResponseEntity.ok(profesoresConCorreo);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al listar profesores: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al listar profesores: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -79,10 +79,10 @@ public class AdminProfesorController {
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Map<String, Object>> registrarProfesor(@RequestBody ProfesorRegistroDTO profesorDto) {
 
-        System.out.println("🔵 [API ADMIN] POST /api/admin/profesores - Registrando profesor");
-        System.out.println("👤 [API ADMIN] Nombre: " + profesorDto.getNombreCompleto());
-        System.out.println("📧 [API ADMIN] Correo: " + profesorDto.getCorreo());
-        System.out.println("📞 [API ADMIN] Teléfono: " + profesorDto.getTelefono());
+        System.out.println("[INFO] [CONTROLLER] POST /api/admin/profesores - Registrando profesor");
+        System.out.println("[INFO] [CONTROLLER] Nombre: " + profesorDto.getNombreCompleto());
+        System.out.println("[INFO] [CONTROLLER] Correo: " + profesorDto.getCorreo());
+        System.out.println("[INFO] [CONTROLLER] Teléfono: " + profesorDto.getTelefono());
 
         try {
             Profesor nuevoProfesor = profesorService.registrarProfesor(profesorDto);
@@ -92,10 +92,10 @@ public class AdminProfesorController {
             response.put("message", "Profesor registrado exitosamente");
             response.put("profesor", nuevoProfesor);
 
-            System.out.println("✅ [API ADMIN SUCCESS] Profesor registrado con ID: " + nuevoProfesor.getId());
+            System.out.println("[SUCCESS] [CONTROLLER] Profesor registrado con ID: " + nuevoProfesor.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al registrar profesor: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al registrar profesor: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -114,9 +114,9 @@ public class AdminProfesorController {
             @PathVariable Long id,
             @RequestBody ProfesorEdicionDTO profesorDto) {
 
-        System.out.println("🔵 [API ADMIN] PUT /api/admin/profesores/" + id + " - Editando profesor");
-        System.out.println("📝 [API ADMIN] Datos nuevos - Nombre: " + profesorDto.getNombreCompleto());
-        System.out.println("📧 [API ADMIN] Email: " + profesorDto.getCorreo());
+        System.out.println("[INFO] [CONTROLLER] PUT /api/admin/profesores/" + id + " - Editando profesor");
+        System.out.println("[INFO] [CONTROLLER] Datos nuevos - Nombre: " + profesorDto.getNombreCompleto());
+        System.out.println("[INFO] [CONTROLLER] Email: " + profesorDto.getCorreo());
 
         try {
             profesorDto.setId(id);
@@ -127,10 +127,10 @@ public class AdminProfesorController {
             response.put("message", "Profesor actualizado exitosamente");
             response.put("profesor", profesorActualizado);
 
-            System.out.println("✅ [API ADMIN SUCCESS] Profesor actualizado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Profesor actualizado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al editar profesor: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al editar profesor: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -146,7 +146,7 @@ public class AdminProfesorController {
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Map<String, Object>> eliminarProfesor(@PathVariable Long id) {
-        System.out.println("🔵 [API ADMIN] DELETE /api/admin/profesores/" + id + " - Eliminando profesor");
+        System.out.println("[INFO] [CONTROLLER] DELETE /api/admin/profesores/" + id + " - Eliminando profesor");
 
         try {
             profesorService.eliminarProfesor(id);
@@ -155,10 +155,10 @@ public class AdminProfesorController {
             response.put("success", true);
             response.put("message", "Profesor eliminado exitosamente");
 
-            System.out.println("✅ [API ADMIN SUCCESS] Profesor eliminado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Profesor eliminado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al eliminar profesor: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al eliminar profesor: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);

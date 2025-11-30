@@ -54,7 +54,7 @@ public class AdminClienteController {
     @GetMapping
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<List<Map<String, Object>>> listarClientes() {
-        System.out.println("🔵 [API ADMIN] GET /api/admin/clientes - Listando clientes con inscripciones");
+        System.out.println("[INFO] [CONTROLLER] GET /api/admin/clientes - Listando clientes con inscripciones");
         try {
             List<Cliente> clientes = clienteService.listarClientes();
 
@@ -95,18 +95,18 @@ public class AdminClienteController {
 
                 clienteMap.put("inscripciones", inscripcionesList);
 
-                System.out.println("👤 [API ADMIN] Cliente ID " + cliente.getId() +
+                System.out.println("[INFO] [CONTROLLER] Cliente ID " + cliente.getId() +
                         " - Correo: " + correoUser +
                         " - Inscripciones: " + inscripcionesList.size());
 
                 return clienteMap;
             }).collect(Collectors.toList());
 
-            System.out.println("✅ [API ADMIN SUCCESS] " + clientesConInscripciones.size()
+            System.out.println("[SUCCESS] [CONTROLLER] " + clientesConInscripciones.size()
                     + " clientes obtenidos con inscripciones");
             return ResponseEntity.ok(clientesConInscripciones);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al listar clientes: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al listar clientes: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -120,11 +120,11 @@ public class AdminClienteController {
     @GetMapping("/talleres-disponibles")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<List<Taller>> obtenerTalleresDisponibles() {
-        System.out.println("🔵 [API ADMIN] GET /api/admin/clientes/talleres-disponibles");
+        System.out.println("[INFO] [CONTROLLER] GET /api/admin/clientes/talleres-disponibles");
         try {
             List<Taller> talleresActivos = tallerService.encontrarTalleresActivos();
             LocalDate hoy = LocalDate.now();
-            System.out.println("📅 [API ADMIN] Fecha actual: " + hoy);
+            System.out.println("📅 [CONTROLLER] Fecha actual: " + hoy);
 
             List<Taller> talleresFiltrados = talleresActivos.stream().map(taller -> {
                 List<Horario> horariosDisponibles = taller.getHorarios().stream()
@@ -133,7 +133,7 @@ public class AdminClienteController {
                             boolean noHaIniciado = horario.getFechaInicio() != null
                                     && !horario.getFechaInicio().isBefore(hoy);
 
-                            System.out.println("🔍 [API ADMIN] Horario ID " + horario.getId() + " - Vacantes: "
+                            System.out.println("[INFO] [CONTROLLER] Horario ID " + horario.getId() + " - Vacantes: "
                                     + horario.getVacantesDisponibles() + ", Fecha inicio: " + horario.getFechaInicio()
                                     + ", No ha iniciado: " + noHaIniciado);
 
@@ -145,10 +145,10 @@ public class AdminClienteController {
             }).filter(taller -> !taller.getHorarios().isEmpty())
                     .collect(Collectors.toList());
 
-            System.out.println("✅ [API ADMIN SUCCESS] " + talleresFiltrados.size() + " talleres disponibles");
+            System.out.println("[SUCCESS] [CONTROLLER] " + talleresFiltrados.size() + " talleres disponibles");
             return ResponseEntity.ok(talleresFiltrados);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al obtener talleres disponibles: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al obtener talleres disponibles: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -164,9 +164,9 @@ public class AdminClienteController {
 
         System.out.println(
                 "🔵 [API ADMIN] POST /api/admin/clientes - Registrando cliente: " + clienteDto.getNombreCompleto());
-        System.out.println("📧 [API ADMIN] Email: " + clienteDto.getCorreo());
-        System.out.println("📞 [API ADMIN] Teléfono: " + clienteDto.getTelefono());
-        System.out.println("🎓 [API ADMIN] Talleres seleccionados: " + clienteDto.getTalleresSeleccionados());
+        System.out.println("[INFO] [CONTROLLER] Email: " + clienteDto.getCorreo());
+        System.out.println("[INFO] [CONTROLLER] Teléfono: " + clienteDto.getTelefono());
+        System.out.println("[INFO] [CONTROLLER] Talleres seleccionados: " + clienteDto.getTalleresSeleccionados());
 
         try {
             InscripcionFormDTO inscripcionDto = new InscripcionFormDTO();
@@ -178,11 +178,11 @@ public class AdminClienteController {
 
             if (horariosMap != null && !horariosMap.isEmpty()) {
                 horariosMap.forEach((tallerId, horarioId) -> {
-                    System.out.println("🔗 [API ADMIN] Taller ID " + tallerId + " -> Horario ID " + horarioId);
+                    System.out.println("[INFO] [CONTROLLER] Taller ID " + tallerId + " -> Horario ID " + horarioId);
                 });
             }
 
-            System.out.println("🚀 [API ADMIN] Llamando a inscripcionService.procesarInscripcionCompleta");
+            System.out.println("[INFO] [CONTROLLER] Llamando a inscripcionService.procesarInscripcionCompleta");
             CredencialesDTO credenciales = inscripcionService.procesarInscripcionCompleta(
                     inscripcionDto,
                     horariosMap != null ? horariosMap : new HashMap<>());
@@ -193,11 +193,11 @@ public class AdminClienteController {
             response.put("email", credenciales.getCorreo());
             response.put("temporalPassword", credenciales.getContrasenaTemporal());
 
-            System.out.println("✅ [API ADMIN SUCCESS] Cliente registrado: " + clienteDto.getNombreCompleto());
-            System.out.println("🔑 [API ADMIN] Contraseña temporal: " + credenciales.getContrasenaTemporal());
+            System.out.println("[SUCCESS] [CONTROLLER] Cliente registrado: " + clienteDto.getNombreCompleto());
+            System.out.println("[INFO] [CONTROLLER] Contraseña temporal: " + credenciales.getContrasenaTemporal());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al registrar cliente: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al registrar cliente: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -216,10 +216,10 @@ public class AdminClienteController {
             @PathVariable Long id,
             @RequestBody ClienteRegistroDTO clienteDto) {
 
-        System.out.println("🔵 [API ADMIN] PUT /api/admin/clientes/" + id + " - Editando cliente");
-        System.out.println("📝 [API ADMIN] Datos nuevos - Nombre: " + clienteDto.getNombreCompleto());
-        System.out.println("📧 [API ADMIN] Email: " + clienteDto.getCorreo());
-        System.out.println("📞 [API ADMIN] Teléfono: " + clienteDto.getTelefono());
+        System.out.println("[INFO] [CONTROLLER] PUT /api/admin/clientes/" + id + " - Editando cliente");
+        System.out.println("[INFO] [CONTROLLER] Datos nuevos - Nombre: " + clienteDto.getNombreCompleto());
+        System.out.println("[INFO] [CONTROLLER] Email: " + clienteDto.getCorreo());
+        System.out.println("[INFO] [CONTROLLER] Teléfono: " + clienteDto.getTelefono());
 
         try {
             Cliente clienteOriginal = clienteService.listarClientes().stream()
@@ -230,7 +230,7 @@ public class AdminClienteController {
             String correoOriginal = clienteOriginal.getUser() != null ? clienteOriginal.getUser().getEmail()
                     : clienteOriginal.getCorreo();
 
-            System.out.println("📧 [API ADMIN] Correo original: " + correoOriginal);
+            System.out.println("[INFO] [CONTROLLER] Correo original: " + correoOriginal);
 
             Cliente clienteActualizado = clienteService.actualizarCliente(
                     id,
@@ -244,10 +244,10 @@ public class AdminClienteController {
             response.put("message", "Cliente actualizado exitosamente");
             response.put("cliente", clienteActualizado);
 
-            System.out.println("✅ [API ADMIN SUCCESS] Cliente actualizado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Cliente actualizado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al editar cliente: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al editar cliente: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -263,7 +263,7 @@ public class AdminClienteController {
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Map<String, Object>> eliminarCliente(@PathVariable Long id) {
-        System.out.println("🔵 [API ADMIN] DELETE /api/admin/clientes/" + id + " - Eliminando cliente");
+        System.out.println("[INFO] [CONTROLLER] DELETE /api/admin/clientes/" + id + " - Eliminando cliente");
 
         try {
             clienteService.eliminarCliente(id);
@@ -272,10 +272,10 @@ public class AdminClienteController {
             response.put("success", true);
             response.put("message", "Cliente eliminado exitosamente");
 
-            System.out.println("✅ [API ADMIN SUCCESS] Cliente eliminado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Cliente eliminado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al eliminar cliente: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al eliminar cliente: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -294,9 +294,9 @@ public class AdminClienteController {
             @PathVariable Long id,
             @RequestBody Map<String, Long> payload) {
 
-        System.out.println("🔵 [API ADMIN] POST /api/admin/clientes/" + id + "/inscripciones - Agregando inscripción");
+        System.out.println("[INFO] [CONTROLLER] POST /api/admin/clientes/" + id + "/inscripciones - Agregando inscripción");
         Long horarioId = payload.get("horarioId");
-        System.out.println("📅 [API ADMIN] Horario ID: " + horarioId);
+        System.out.println("📅 [CONTROLLER] Horario ID: " + horarioId);
 
         try {
             inscripcionService.inscribirClienteExistente(id, horarioId);
@@ -305,10 +305,10 @@ public class AdminClienteController {
             response.put("success", true);
             response.put("message", "Inscripción agregada exitosamente");
 
-            System.out.println("✅ [API ADMIN SUCCESS] Inscripción agregada al cliente: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Inscripción agregada al cliente: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al agregar inscripción: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al agregar inscripción: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -327,7 +327,7 @@ public class AdminClienteController {
             @PathVariable Long id,
             @PathVariable Long horarioId) {
 
-        System.out.println("🔵 [API ADMIN] DELETE /api/admin/clientes/" + id + "/inscripciones/" + horarioId
+        System.out.println("[INFO] [CONTROLLER] DELETE /api/admin/clientes/" + id + "/inscripciones/" + horarioId
                 + " - Eliminando inscripción");
 
         try {
@@ -337,10 +337,10 @@ public class AdminClienteController {
             response.put("success", true);
             response.put("message", "Inscripción eliminada exitosamente");
 
-            System.out.println("✅ [API ADMIN SUCCESS] Inscripción eliminada del cliente: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Inscripción eliminada del cliente: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al eliminar inscripción: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al eliminar inscripción: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);

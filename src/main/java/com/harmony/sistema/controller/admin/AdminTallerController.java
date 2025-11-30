@@ -39,13 +39,13 @@ public class AdminTallerController {
     @GetMapping
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<List<Taller>> listarTalleres() {
-        System.out.println("🔵 [API ADMIN] GET /api/admin/talleres - Listando talleres");
+        System.out.println("[INFO] [CONTROLLER] GET /api/admin/talleres - Listando talleres");
         try {
             List<Taller> talleres = tallerService.listarTalleres();
-            System.out.println("✅ [API ADMIN SUCCESS] " + talleres.size() + " talleres obtenidos");
+            System.out.println("[SUCCESS] [CONTROLLER] " + talleres.size() + " talleres obtenidos");
             return ResponseEntity.ok(talleres);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al listar talleres: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al listar talleres: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -58,13 +58,13 @@ public class AdminTallerController {
     @GetMapping("/activos")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<List<Taller>> listarTalleresActivos() {
-        System.out.println("🔵 [API ADMIN] GET /api/admin/talleres/activos - Listando talleres activos");
+        System.out.println("[INFO] [CONTROLLER] GET /api/admin/talleres/activos - Listando talleres activos");
         try {
             List<Taller> talleresActivos = tallerService.encontrarTalleresActivos();
-            System.out.println("✅ [API ADMIN SUCCESS] " + talleresActivos.size() + " talleres activos obtenidos");
+            System.out.println("[SUCCESS] [CONTROLLER] " + talleresActivos.size() + " talleres activos obtenidos");
             return ResponseEntity.ok(talleresActivos);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al listar talleres activos: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al listar talleres activos: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -78,9 +78,9 @@ public class AdminTallerController {
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Map<String, Object>> registrarTaller(@RequestBody Taller taller) {
         System.out.println("========================================");
-        System.out.println("🔵 [API ADMIN] POST /api/admin/talleres");
+        System.out.println("[INFO] [CONTROLLER] POST /api/admin/talleres");
         System.out.println("========================================");
-        System.out.println("📝 [API ADMIN] Datos recibidos:");
+        System.out.println("[INFO] [CONTROLLER] Datos recibidos:");
         System.out.println("   - Nombre: " + taller.getNombre());
         System.out.println("   - Descripción: " + (taller.getDescripcion() != null
                 ? taller.getDescripcion().substring(0, Math.min(50, taller.getDescripcion().length())) + "..."
@@ -95,9 +95,9 @@ public class AdminTallerController {
                 : "null"));
 
         try {
-            System.out.println("🚀 [API ADMIN] Llamando a tallerService.crearTallerSolo()");
+            System.out.println("[INFO] [CONTROLLER] Llamando a tallerService.crearTallerSolo()");
             Taller nuevoTaller = tallerService.crearTallerSolo(taller);
-            System.out.println("✅ [API ADMIN SUCCESS] Taller creado con ID: " + nuevoTaller.getId());
+            System.out.println("[SUCCESS] [CONTROLLER] Taller creado con ID: " + nuevoTaller.getId());
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -107,7 +107,7 @@ public class AdminTallerController {
             System.out.println("========================================\n");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Excepción capturada:");
+            System.err.println("[ERROR] [CONTROLLER] Excepción capturada:");
             System.out.println("   - Tipo: " + e.getClass().getName());
             System.out.println("   - Mensaje: " + e.getMessage());
             e.printStackTrace();
@@ -132,9 +132,9 @@ public class AdminTallerController {
             @RequestBody Taller tallerActualizado) {
 
         System.out.println("========================================");
-        System.out.println("🔵 [API ADMIN] PUT /api/admin/talleres/" + id);
+        System.out.println("[INFO] [CONTROLLER] PUT /api/admin/talleres/" + id);
         System.out.println("========================================");
-        System.out.println("📝 [API ADMIN] Datos recibidos para actualización:");
+        System.out.println("[INFO] [CONTROLLER] Datos recibidos para actualización:");
         System.out.println("   - Taller ID: " + id);
         System.out.println("   - Nuevo Nombre: " + tallerActualizado.getNombre());
         System.out
@@ -149,10 +149,10 @@ public class AdminTallerController {
         System.out.println("   - Activo: " + tallerActualizado.isActivo());
 
         try {
-            System.out.println("🚀 [API ADMIN] Llamando a tallerService.editarTaller()");
+            System.out.println("[INFO] [CONTROLLER] Llamando a tallerService.editarTaller()");
             tallerActualizado.setId(id);
             Taller taller = tallerService.editarTaller(tallerActualizado);
-            System.out.println("✅ [API ADMIN SUCCESS] Taller actualizado correctamente");
+            System.out.println("[SUCCESS] [CONTROLLER] Taller actualizado correctamente");
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -162,7 +162,7 @@ public class AdminTallerController {
             System.out.println("========================================\n");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Excepción capturada:");
+            System.err.println("[ERROR] [CONTROLLER] Excepción capturada:");
             System.out.println("   - Tipo: " + e.getClass().getName());
             System.out.println("   - Mensaje: " + e.getMessage());
             e.printStackTrace();
@@ -183,7 +183,7 @@ public class AdminTallerController {
     @DeleteMapping("/{id}")
     @SuppressWarnings("CallToPrintStackTrace")
     public ResponseEntity<Map<String, Object>> eliminarTaller(@PathVariable Long id) {
-        System.out.println("🔵 [API ADMIN] DELETE /api/admin/talleres/" + id + " - Eliminando taller");
+        System.out.println("[INFO] [CONTROLLER] DELETE /api/admin/talleres/" + id + " - Eliminando taller");
 
         try {
             tallerService.eliminarTaller(id);
@@ -192,10 +192,10 @@ public class AdminTallerController {
             response.put("success", true);
             response.put("message", "Taller eliminado exitosamente");
 
-            System.out.println("✅ [API ADMIN SUCCESS] Taller eliminado: " + id);
+            System.out.println("[SUCCESS] [CONTROLLER] Taller eliminado: " + id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("❌ [API ADMIN ERROR] Error al eliminar taller: " + e.getMessage());
+            System.err.println("[ERROR] [CONTROLLER] Error al eliminar taller: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
