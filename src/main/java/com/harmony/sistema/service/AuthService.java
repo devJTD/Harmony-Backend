@@ -44,12 +44,12 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        System.out.println(" [AUTH SERVICE] ========================================");
-        System.out.println(" [AUTH SERVICE] Iniciando registro para el email: " + request.getEmail());
+        System.out.println("[INFO] [AUTH] ========================================");
+        System.out.println("[INFO] [AUTH] Iniciando registro para el email: " + request.getEmail());
 
         // 1. Verificar si el usuario ya existe
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            System.err.println(" [AUTH SERVICE ERROR] El email ya está registrado: " + request.getEmail());
+            System.err.println("[ERROR] [AUTH] El email ya está registrado: " + request.getEmail());
             throw new RuntimeException("El email ya está registrado en el sistema");
         }
 
@@ -57,10 +57,10 @@ public class AuthService {
         Optional<Role> userRole = roleRepository.findByName("ROLE_CLIENTE");
 
         if (userRole.isEmpty()) {
-            System.err.println(" [AUTH SERVICE ERROR] El rol 'ROLE_CLIENTE' no existe en la BD");
+            System.err.println("[ERROR] [AUTH] El rol 'ROLE_CLIENTE' no existe en la BD");
             throw new RuntimeException("Error de configuración: Rol ROLE_CLIENTE no encontrado");
         }
-        System.out.println(" [AUTH SERVICE] Rol 'ROLE_CLIENTE' encontrado");
+        System.out.println("[INFO] [AUTH] Rol 'ROLE_CLIENTE' encontrado");
 
         // 3. Construir y guardar el objeto User
         var user = User.builder()
@@ -70,14 +70,14 @@ public class AuthService {
                 .roles(Collections.singleton(userRole.get()))
                 .build();
 
-        System.out.println(" [AUTH SERVICE] Usuario construido, guardando en BD...");
+        System.out.println("[INFO] [AUTH] Usuario construido, guardando en BD...");
         userRepository.save(user);
-        System.out.println(" [AUTH SERVICE] Usuario guardado exitosamente");
+        System.out.println("[SUCCESS] [AUTH] Usuario guardado exitosamente");
 
         // 4. Generar el token JWT
         var jwtToken = jwtService.generateToken(user);
-        System.out.println(" [AUTH SERVICE] Token JWT generado");
-        System.out.println(" [AUTH SERVICE] ========================================");
+        System.out.println("[SUCCESS] [AUTH] Token JWT generado");
+        System.out.println("[INFO] [AUTH] ========================================");
 
         // 5. Retornar respuesta con token y rol
         return AuthResponse.builder()
@@ -93,8 +93,8 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
-        System.out.println(" [AUTH SERVICE] ========================================");
-        System.out.println(" [AUTH SERVICE] Iniciando login para: " + request.getEmail());
+        System.out.println("[INFO] [AUTH] ========================================");
+        System.out.println("[INFO] [AUTH] Iniciando login para: " + request.getEmail());
 
         try {
             // 1. Autenticar credenciales
@@ -102,28 +102,28 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()));
-            System.out.println(" [AUTH SERVICE] Credenciales autenticadas correctamente");
+            System.out.println("[SUCCESS] [AUTH] Credenciales autenticadas correctamente");
 
         } catch (BadCredentialsException e) {
-            System.err.println(" [AUTH SERVICE ERROR] Credenciales inválidas para: " + request.getEmail());
+            System.err.println("[ERROR] [AUTH] Credenciales inválidas para: " + request.getEmail());
             throw new BadCredentialsException("Email o contraseña incorrectos");
         }
 
         // 2. Recuperar la entidad User
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> {
-                    System.err.println(" [AUTH SERVICE ERROR] Usuario no encontrado: " + request.getEmail());
+                    System.err.println("[ERROR] [AUTH] Usuario no encontrado: " + request.getEmail());
                     return new RuntimeException("Usuario no encontrado");
                 });
 
-        System.out.println(" [AUTH SERVICE] Usuario recuperado de BD");
+        System.out.println("[INFO] [AUTH] Usuario recuperado de BD");
 
         // 3. Determinar el rol del usuario
         String roleName = user.getRoles().isEmpty()
                 ? "ROLE_CLIENTE"
                 : user.getRoles().iterator().next().getName();
 
-        System.out.println(" [AUTH SERVICE] Rol detectado: " + roleName);
+        System.out.println("[INFO] [AUTH] Rol detectado: " + roleName);
 
         // 4. Obtener el nombre completo y el ID según el rol
         String nombreCompleto = user.getEmail();
@@ -135,33 +135,34 @@ public class AuthService {
                 if (clienteOpt.isPresent()) {
                     nombreCompleto = clienteOpt.get().getNombreCompleto();
                     userId = clienteOpt.get().getId();
-                    System.out.println(" [AUTH SERVICE] Datos de Cliente encontrados. ID: " + userId);
+                    System.out.println("[INFO] [AUTH] Datos de Cliente encontrados. ID: " + userId);
                 }
             } else if ("ROLE_PROFESOR".equals(roleName)) {
                 Optional<Profesor> profesorOpt = profesorRepository.findByUser(user);
                 if (profesorOpt.isPresent()) {
                     nombreCompleto = profesorOpt.get().getNombreCompleto();
                     userId = profesorOpt.get().getId();
-                    System.out.println(" [AUTH SERVICE] Datos de Profesor encontrados. ID: " + userId);
+                    System.out.println("[INFO] [AUTH] Datos de Profesor encontrados. ID: " + userId);
                 }
             }
         } catch (Exception e) {
-            System.err.println(" [AUTH SERVICE ERROR] Error obteniendo datos adicionales: " + e.getMessage());
+            System.err.println("[ERROR] [AUTH] Error obteniendo datos adicionales: " + e.getMessage());
         }
 
-        System.out.println(" [AUTH SERVICE] Nombre completo: " + nombreCompleto);
+        System.out.println("[INFO] [AUTH] Nombre completo: " + nombreCompleto);
 
         // 5. Generar el token JWT
         var jwtToken = jwtService.generateToken(user);
 
-        System.out.println(" [AUTH SERVICE] ========================================");
-        System.out.println(" | JWT GENERADO PARA: " + request.getEmail());
-        System.out.println(" | ROL: " + roleName);
-        System.out.println(" | NOMBRE: " + nombreCompleto);
-        System.out.println(" | ID: " + userId);
+        System.out.println("[INFO] [AUTH] ========================================");
+        System.out.println("[SUCCESS] [AUTH] JWT GENERADO PARA: " + request.getEmail());
+        System.out.println("[INFO] [AUTH] ROL: " + roleName);
+        System.out.println("[INFO] [AUTH] NOMBRE: " + nombreCompleto);
+        System.out.println("[INFO] [AUTH] ID: " + userId);
         System.out.println(
-                " | TOKEN (primeros 50 chars): " + jwtToken.substring(0, Math.min(50, jwtToken.length())) + "...");
-        System.out.println(" [AUTH SERVICE] ========================================");
+                "[DEBUG] [AUTH] TOKEN (primeros 50 chars): " + jwtToken.substring(0, Math.min(50, jwtToken.length()))
+                        + "...");
+        System.out.println("[INFO] [AUTH] ========================================");
 
         // 6. Retornar respuesta completa
         return AuthResponse.builder()
@@ -179,8 +180,8 @@ public class AuthService {
      */
     @Transactional
     public void forgotPassword(String email) {
-        System.out.println(" [AUTH SERVICE] ========================================");
-        System.out.println(" [AUTH SERVICE] Solicitud de recuperación para: " + email);
+        System.out.println("[INFO] [AUTH] ========================================");
+        System.out.println("[INFO] [AUTH] Solicitud de recuperación para: " + email);
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -194,7 +195,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        System.out.println(" [AUTH SERVICE] Código generado: " + code);
+        System.out.println("[INFO] [AUTH] Código generado: " + code);
 
         // Enviar correo
         String asunto = "Recuperación de Contraseña - Harmony";
@@ -205,7 +206,7 @@ public class AuthService {
 
         emailService.enviarCorreo(email, asunto, cuerpo);
 
-        System.out.println(" [AUTH SERVICE] ========================================");
+        System.out.println("[INFO] [AUTH] ========================================");
     }
 
     /**
@@ -213,8 +214,8 @@ public class AuthService {
      */
     @Transactional
     public void resetPassword(String token, String newPassword) {
-        System.out.println(" [AUTH SERVICE] ========================================");
-        System.out.println(" [AUTH SERVICE] Restableciendo contraseña con token: " + token);
+        System.out.println("[INFO] [AUTH] ========================================");
+        System.out.println("[INFO] [AUTH] Restableciendo contraseña con token: " + token);
 
         User user = userRepository.findByResetToken(token)
                 .orElseThrow(() -> new RuntimeException("Token inválido"));
@@ -229,7 +230,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        System.out.println(" [AUTH SERVICE] Contraseña actualizada exitosamente");
-        System.out.println(" [AUTH SERVICE] ========================================");
+        System.out.println("[SUCCESS] [AUTH] Contraseña actualizada exitosamente");
+        System.out.println("[INFO] [AUTH] ========================================");
     }
 }

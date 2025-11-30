@@ -25,23 +25,23 @@ public class TallerService {
 
     // ✅ CORREGIDO: Usa query con FETCH JOIN
     public List<Taller> encontrarTalleresActivos() {
-        System.out.println("🔍 [TALLER SERVICE] Buscando todos los talleres activos.");
+        System.out.println("[INFO] [TALLER] Buscando todos los talleres activos.");
         List<Taller> talleres = tallerRepository.findByActivoTrue();
-        System.out.println("✅ [TALLER SERVICE] " + talleres.size() + " talleres activos encontrados");
+        System.out.println("[SUCCESS] [TALLER] " + talleres.size() + " talleres activos encontrados");
         return talleres;
     }
 
     // ✅ CORREGIDO: Usa query con FETCH JOIN
     public List<Taller> listarTalleres() {
-        System.out.println("🔍 [TALLER SERVICE] Listando todos los talleres (activos e inactivos).");
+        System.out.println("[INFO] [TALLER] Listando todos los talleres (activos e inactivos).");
         List<Taller> talleres = tallerRepository.findAllWithHorariosAndProfesores();
-        System.out.println("✅ [TALLER SERVICE] " + talleres.size() + " talleres encontrados");
+        System.out.println("[SUCCESS] [TALLER] " + talleres.size() + " talleres encontrados");
         return talleres;
     }
 
     @Transactional
     public Taller crearTallerSolo(Taller taller) {
-        System.out.println("🔵 [TALLER SERVICE] Iniciando creación de nuevo taller: " + taller.getNombre());
+        System.out.println("[INFO] [TALLER] Iniciando creación de nuevo taller: " + taller.getNombre());
 
         // Validar datos del taller usando el componente especializado
         validadorTaller.validarParaCreacion(taller);
@@ -51,23 +51,23 @@ public class TallerService {
 
         // Guardar taller
         Taller nuevoTaller = tallerRepository.save(taller);
-        System.out.println("✅ [TALLER SERVICE SUCCESS] Taller creado y guardado con ID: " + nuevoTaller.getId());
+        System.out.println("[SUCCESS] [TALLER] Taller creado y guardado con ID: " + nuevoTaller.getId());
         return nuevoTaller;
     }
 
     @Transactional
     public Taller editarTaller(Taller tallerActualizado) {
-        System.out.println("🔵 [TALLER SERVICE] Iniciando edición de taller con ID: " + tallerActualizado.getId());
+        System.out.println("[INFO] [TALLER] Iniciando edición de taller con ID: " + tallerActualizado.getId());
 
         Optional<Taller> tallerOpt = tallerRepository.findById(tallerActualizado.getId());
 
         if (tallerOpt.isEmpty()) {
-            System.out.println("❌ [TALLER SERVICE ERROR] Taller no encontrado con ID: " + tallerActualizado.getId());
+            System.err.println("[ERROR] [TALLER] Taller no encontrado con ID: " + tallerActualizado.getId());
             throw new RuntimeException("Taller con ID " + tallerActualizado.getId() + " no encontrado.");
         }
 
         Taller tallerExistente = tallerOpt.get();
-        System.out.println("✔️ [TALLER SERVICE] Taller existente encontrado: " + tallerExistente.getNombre());
+        System.out.println("[INFO] [TALLER] Taller existente encontrado: " + tallerExistente.getNombre());
 
         if (tallerActualizado.getNombre() != null && !tallerActualizado.getNombre().trim().isEmpty()) {
             tallerExistente.setNombre(tallerActualizado.getNombre());
@@ -103,21 +103,21 @@ public class TallerService {
             tallerExistente.setTemas(tallerActualizado.getTemas());
         }
 
-        System.out.println("📝 [TALLER SERVICE] Campos del taller actualizados");
-        System.out.println("🔍 [TALLER SERVICE] Activo: " + tallerActualizado.isActivo());
+        System.out.println("[INFO] [TALLER] Campos del taller actualizados");
+        System.out.println("[INFO] [TALLER] Activo: " + tallerActualizado.isActivo());
 
         Taller updatedTaller = tallerRepository.save(tallerExistente);
         System.out
-                .println("✅ [TALLER SERVICE SUCCESS] Taller ID " + updatedTaller.getId() + " actualizado y guardado.");
+                .println("[SUCCESS] [TALLER] Taller ID " + updatedTaller.getId() + " actualizado y guardado.");
         return updatedTaller;
     }
 
     // ✅ CORREGIDO: Asegurar carga de horarios
     public Taller obtenerTallerPorId(Long tallerId) {
-        System.out.println("🔍 [TALLER SERVICE] Buscando taller por ID: " + tallerId);
+        System.out.println("[INFO] [TALLER] Buscando taller por ID: " + tallerId);
         Taller taller = tallerRepository.findById(tallerId)
                 .orElseThrow(() -> {
-                    System.out.println("❌ [TALLER SERVICE ERROR] Taller con ID " + tallerId + " no encontrado.");
+                    System.err.println("[ERROR] [TALLER] Taller con ID " + tallerId + " no encontrado.");
                     return new RuntimeException("Taller con ID " + tallerId + " no encontrado.");
                 });
 
@@ -126,20 +126,20 @@ public class TallerService {
             taller.getHorarios().size();
         }
 
-        System.out.println("✅ [TALLER SERVICE] Taller encontrado: " + taller.getNombre());
+        System.out.println("[SUCCESS] [TALLER] Taller encontrado: " + taller.getNombre());
         return taller;
     }
 
     @Transactional
     public void eliminarTaller(Long tallerId) {
-        System.out.println("🔵 [TALLER SERVICE] Iniciando eliminación de taller con ID: " + tallerId);
+        System.out.println("[INFO] [TALLER] Iniciando eliminación de taller con ID: " + tallerId);
 
         if (!tallerRepository.existsById(tallerId)) {
-            System.out.println("❌ [TALLER SERVICE ERROR] Taller no encontrado con ID: " + tallerId);
+            System.err.println("[ERROR] [TALLER] Taller no encontrado con ID: " + tallerId);
             throw new RuntimeException("Taller con ID " + tallerId + " no encontrado.");
         }
 
         tallerRepository.deleteById(tallerId);
-        System.out.println("✅ [TALLER SERVICE SUCCESS] Taller ID " + tallerId + " eliminado exitosamente.");
+        System.out.println("[SUCCESS] [TALLER] Taller ID " + tallerId + " eliminado exitosamente.");
     }
 }

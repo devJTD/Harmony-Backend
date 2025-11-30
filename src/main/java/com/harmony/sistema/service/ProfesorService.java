@@ -40,13 +40,13 @@ public class ProfesorService {
 
     // Obtiene y retorna una lista de todos los profesores.
     public List<Profesor> listarProfesores() {
-        System.out.println(" [PROFESOR SERVICE] Listando todos los profesores.");
+        System.out.println("[INFO] [PROFESOR] Listando todos los profesores.");
         return profesorRepository.findAll();
     }
 
     // Obtiene un profesor por su ID, lanzando una excepción si no se encuentra.
     public Profesor obtenerProfesorPorId(Long profesorId) {
-        System.out.println(" [PROFESOR SERVICE] Buscando profesor por ID: " + profesorId);
+        System.out.println("[INFO] [PROFESOR] Buscando profesor por ID: " + profesorId);
         return profesorRepository.findById(profesorId)
                 .orElseThrow(() -> new RuntimeException("Profesor con ID " + profesorId + " no encontrado."));
     }
@@ -54,14 +54,14 @@ public class ProfesorService {
     // Registra un nuevo profesor, creando su entidad User asociada con el rol
     // 'ROLE_PROFESOR', una contraseña temporal, y envía un correo electrónico.
     public Profesor registrarProfesor(ProfesorRegistroDTO dto) {
-        System.out.println(" [PROFESOR SERVICE] Iniciando registro de nuevo profesor.");
+        System.out.println("[INFO] [PROFESOR] Iniciando registro de nuevo profesor.");
         // 1. Busca el rol y genera la contraseña temporal.
         Role roleProfesor = roleRepository.findByName(ROLE_PROFESOR)
                 .orElseThrow(
                         () -> new RuntimeException("Error: El rol PROFESOR no fue encontrado en la base de datos"));
 
         String passwordRandom = generadorRandomPassword();
-        System.out.println(" [PROFESOR SERVICE] Contraseña temporal generada.");
+        System.out.println("[INFO] [PROFESOR] Contraseña temporal generada.");
 
         // 2. Crea y guarda la entidad User con la contraseña codificada y el rol de
         // profesor.
@@ -72,7 +72,7 @@ public class ProfesorService {
                 .roles(Set.of(roleProfesor))
                 .build();
         userRepository.save(user);
-        System.out.println(" [PROFESOR SERVICE] Entidad User creada y guardada para: " + dto.getCorreo());
+        System.out.println("[SUCCESS] [PROFESOR] Entidad User creada y guardada para: " + dto.getCorreo());
 
         // 3. Crea y guarda la entidad Profesor con sus datos asociados al User.
         Profesor profesor = Profesor.builder()
@@ -84,7 +84,7 @@ public class ProfesorService {
                 .build();
 
         Profesor savedProfesor = profesorRepository.save(profesor);
-        System.out.println(" [PROFESOR SERVICE] Entidad Profesor creada y guardada con ID: " + savedProfesor.getId());
+        System.out.println("[SUCCESS] [PROFESOR] Entidad Profesor creada y guardada con ID: " + savedProfesor.getId());
 
         // 4. Envía un correo electrónico con las credenciales temporales.
         String asunto = "Bienvenido a Harmony - Tu cuenta ha sido creada";
@@ -97,14 +97,14 @@ public class ProfesorService {
 
         emailService.enviarCorreo(dto.getCorreo(), asunto, cuerpo);
         System.out
-                .println(" [PROFESOR SERVICE SUCCESS] Correo de credenciales temporales enviado a: " + dto.getCorreo());
+                .println("[SUCCESS] [PROFESOR] Correo de credenciales temporales enviado a: " + dto.getCorreo());
 
         return savedProfesor;
     }
 
     // Elimina de forma definitiva un profesor y su entidad User asociada.
     public void eliminarProfesor(Long profesorId) {
-        System.out.println(" [PROFESOR SERVICE] Iniciando eliminación de profesor con ID: " + profesorId);
+        System.out.println("[INFO] [PROFESOR] Iniciando eliminación de profesor con ID: " + profesorId);
         // 1. Busca el Profesor y lanza excepción si no existe.
         Profesor profesor = profesorRepository.findById(profesorId)
                 .orElseThrow(() -> new RuntimeException("Profesor con ID " + profesorId + " no encontrado."));
@@ -114,40 +114,40 @@ public class ProfesorService {
 
         // 3. Elimina la entidad Profesor.
         profesorRepository.delete(profesor);
-        System.out.println(" [PROFESOR SERVICE] Entidad Profesor eliminada.");
+        System.out.println("[SUCCESS] [PROFESOR] Entidad Profesor eliminada.");
 
         // 4. Elimina la entidad User asociada, si existe.
         if (user != null) {
             userRepository.delete(user);
-            System.out.println(" [PROFESOR SERVICE SUCCESS] Entidad User asociada eliminada.");
+            System.out.println("[SUCCESS] [PROFESOR] Entidad User asociada eliminada.");
         } else {
-            System.out.println(" [PROFESOR SERVICE WARNING] El profesor no tenía una entidad User asociada.");
+            System.out.println("[WARN] [PROFESOR] El profesor no tenía una entidad User asociada.");
         }
-        System.out.println(" [PROFESOR SERVICE] Eliminación de profesor finalizada para ID: " + profesorId);
+        System.out.println("[INFO] [PROFESOR] Eliminación de profesor finalizada para ID: " + profesorId);
     }
 
     // Edita los datos de un profesor y actualiza el email del User asociado si es
     // necesario.
     public Profesor editarProfesor(ProfesorEdicionDTO dto) {
-        System.out.println(" [PROFESOR SERVICE] Iniciando edición de profesor con ID: " + dto.getId());
+        System.out.println("[INFO] [PROFESOR] Iniciando edición de profesor con ID: " + dto.getId());
         // 1. Obtiene el Profesor existente y verifica que tenga un User asociado.
         Profesor profesor = profesorRepository.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Profesor con ID " + dto.getId() + " no encontrado."));
 
         User user = profesor.getUser();
         if (user == null) {
-            System.out
-                    .println(" [PROFESOR SERVICE ERROR] El profesor no tiene un usuario asociado. No se puede editar.");
+            System.err
+                    .println("[ERROR] [PROFESOR] El profesor no tiene un usuario asociado. No se puede editar.");
             throw new RuntimeException("El profesor no tiene un usuario asociado. No se puede editar.");
         }
 
         // 2. Actualiza el email del Usuario si ha cambiado y lo guarda.
         if (!user.getEmail().equals(dto.getCorreo())) {
-            System.out.println(" [PROFESOR SERVICE] El email ha cambiado. Actualizando User email.");
+            System.out.println("[INFO] [PROFESOR] El email ha cambiado. Actualizando User email.");
             user.setEmail(dto.getCorreo());
             userRepository.save(user);
         } else {
-            System.out.println(" [PROFESOR SERVICE] El email no ha cambiado.");
+            System.out.println("[INFO] [PROFESOR] El email no ha cambiado.");
         }
 
         // 3. Actualiza los demás datos del Profesor.
@@ -155,12 +155,12 @@ public class ProfesorService {
         profesor.setTelefono(dto.getTelefono());
         profesor.setFotoUrl(dto.getFotoUrl());
         profesor.setInformacion(dto.getInformacion());
-        System.out.println(" [PROFESOR SERVICE] Datos del Profesor actualizados.");
+        System.out.println("[INFO] [PROFESOR] Datos del Profesor actualizados.");
 
         // 4. Guarda los cambios del Profesor.
         Profesor updatedProfesor = profesorRepository.save(profesor);
         System.out.println(
-                " [PROFESOR SERVICE SUCCESS] Edición de profesor finalizada para ID: " + updatedProfesor.getId());
+                "[SUCCESS] [PROFESOR] Edición de profesor finalizada para ID: " + updatedProfesor.getId());
         return updatedProfesor;
     }
 
@@ -177,7 +177,7 @@ public class ProfesorService {
 
     public com.harmony.sistema.model.ClaseCancelada cancelarClase(Long horarioId,
             com.harmony.sistema.model.ClaseCancelada claseCancelada) {
-        System.out.println(" [PROFESOR SERVICE] Cancelando clase para horario ID: " + horarioId);
+        System.out.println("[INFO] [PROFESOR] Cancelando clase para horario ID: " + horarioId);
 
         com.harmony.sistema.model.Horario horario = horarioRepository.findById(horarioId)
                 .orElseThrow(() -> new RuntimeException("Horario no encontrado"));
@@ -186,7 +186,7 @@ public class ProfesorService {
         com.harmony.sistema.model.ClaseCancelada saved = claseCanceladaRepository.save(claseCancelada);
 
         // Simulación de envío de correo al admin
-        System.out.println(" [EMAIL SIMULATION] Enviando correo al ADMIN: El profesor " +
+        System.out.println("[INFO] [EMAIL] Enviando correo al ADMIN: El profesor " +
                 horario.getProfesor().getNombreCompleto() + " ha cancelado una clase del taller " +
                 horario.getTaller().getNombre() + " para la fecha " + claseCancelada.getFecha() +
                 ". Motivo: " + claseCancelada.getMotivo());
