@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -8,82 +9,118 @@
         <version>3.5.6</version>
         <relativePath/>
     </parent>
+    
+    <!-- Identificación del proyecto -->
     <groupId>com.harmony</groupId>
     <artifactId>sistema</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>sistema</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Proyecto Aplicación Harmony</description>
+    
+    <!-- Propiedades del proyecto -->
     <properties>
+        <!-- Versión de Java utilizada en el proyecto -->
         <java.version>21</java.version>
     </properties>
+    
+    <!-- Dependencias del proyecto -->
     <dependencies>
+        
+        <!-- Motor de plantillas Thymeleaf para vistas HTML -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        
+        <!-- Starter para crear aplicaciones web RESTful con Spring MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        
+        <!-- Herramientas de desarrollo (hot reload, live reload) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        
+        <!-- Dependencias para testing (JUnit, Mockito, Spring Test) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Lombok para reducir código boilerplate (getters, setters, constructores) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- Spring Data JPA para persistencia de datos con Hibernate -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        
+        <!-- Soporte para envío de correos electrónicos -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        
+        <!-- Driver JDBC para conectar con base de datos MySQL -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+        
+        <!-- Spring Security para autenticación y autorización -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        
+        <!-- API de JWT (JSON Web Token) para autenticación basada en tokens -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
             <version>0.11.5</version>
         </dependency>
+        
+        <!-- Implementación de JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        
+        <!-- Soporte de Jackson para serialización/deserialización JSON en JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        
+        <!-- Base de datos H2 en memoria para tests -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
 
+    <!-- Configuración de construcción del proyecto -->
     <build>
         <plugins>
+            <!-- Plugin de Maven para empaquetar y ejecutar aplicaciones Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
