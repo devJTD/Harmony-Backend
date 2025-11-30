@@ -21,44 +21,40 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
-    // Crea un bean UserDetailsService para cargar los detalles del usuario por email desde la base de datos.
+    // Define el servicio para cargar detalles de usuario por email desde la BD
     @Bean
     public UserDetailsService userDetailsService() {
         System.out.println(" [CONFIG] Inicializando Bean: UserDetailsService (Cargador de usuarios por Email)");
-        // 1. Retorna una implementación lambda que busca el User por email en el repositorio.
+        // Busca el usuario por email o lanza excepción si no se encuentra
         return username -> userRepository.findByEmail(username)
-                // 2. Lanza una excepción si el usuario no es encontrado.
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
 
-    // Crea un bean AuthenticationProvider para manejar la autenticación usando los detalles del usuario y el codificador de contraseñas.
+    // Configura el proveedor de autenticación con el servicio de usuarios y
+    // codificador de contraseñas
     @SuppressWarnings("deprecation")
     @Bean
     public AuthenticationProvider authenticationProvider() {
         System.out.println(" [CONFIG] Inicializando Bean: AuthenticationProvider (DaoAuthenticationProvider)");
-        // 1. Crea una instancia de DaoAuthenticationProvider.
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        // 2. Establece el UserDetailsService.
+        // Asigna el servicio de detalles de usuario y el encriptador de contraseñas
         authProvider.setUserDetailsService(userDetailsService());
-        // 3. Establece el PasswordEncoder.
         authProvider.setPasswordEncoder(passwordEncoder());
-        // 4. Retorna el proveedor de autenticación configurado.
         return authProvider;
     }
 
-    // Expone el AuthenticationManager de Spring Security.
+    // Expone el gestor de autenticación de la configuración global
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         System.out.println(" [CONFIG] Inicializando Bean: AuthenticationManager");
-        // 1. Obtiene el AuthenticationManager de la configuración de autenticación.
+        // Obtiene y retorna el AuthenticationManager
         return config.getAuthenticationManager();
     }
 
-    // Crea un bean PasswordEncoder utilizando BCrypt.
+    // Define el codificador de contraseñas usando BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         System.out.println(" [CONFIG] Inicializando Bean: PasswordEncoder (BCrypt)");
-        // 1. Retorna una instancia de BCryptPasswordEncoder para el cifrado de contraseñas.
         return new BCryptPasswordEncoder();
     }
 }
