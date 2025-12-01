@@ -11,17 +11,20 @@ import com.harmony.sistema.model.Taller;
 
 @Repository
 public interface TallerRepository extends JpaRepository<Taller, Long> {
-    // Busca un taller por su nombre.
-    Optional<Taller> findByNombre(String nombre);
 
-    @Query("SELECT DISTINCT t FROM Taller t " +
-            "LEFT JOIN FETCH t.horarios h " +
-            "LEFT JOIN FETCH h.profesor " +
-            "WHERE t.activo = true")
-    List<Taller> findByActivoTrue();
+        // Busca un taller por su nombre
+        Optional<Taller> findByNombre(String nombre);
 
-    @Query("SELECT DISTINCT t FROM Taller t " +
-            "LEFT JOIN FETCH t.horarios h " +
-            "LEFT JOIN FETCH h.profesor")
-    List<Taller> findAllWithHorariosAndProfesores();
+        // Busca todos los talleres que están marcados como activos (activo = true)
+        @Query("SELECT DISTINCT t FROM Taller t " +
+                        "LEFT JOIN FETCH t.horarios h " +
+                        "LEFT JOIN FETCH h.profesor " +
+                        "WHERE t.activo = true")
+        List<Taller> findByActivoTrue();
+
+        // Busca todos los talleres existentes
+        @Query("SELECT DISTINCT t FROM Taller t " +
+                        "LEFT JOIN FETCH t.horarios h " +
+                        "LEFT JOIN FETCH h.profesor")
+        List<Taller> findAllWithHorariosAndProfesores();
 }

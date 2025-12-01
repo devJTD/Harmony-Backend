@@ -17,9 +17,13 @@ import com.harmony.sistema.model.Taller;
 @Repository
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
 
+        // Busca horarios de clases asociados al Profesor cuyo email de usuario coincide
+        // con el parámetro.
         @Query("SELECT h FROM Horario h LEFT JOIN FETCH h.profesor WHERE h.profesor.user.email = :email")
         List<Horario> findByProfesorUserEmail(@Param("email") String email);
 
+        // Busca horarios de clases a los que el Cliente (identificado por su email de
+        // usuario) está inscrito.
         @Query("SELECT DISTINCT h FROM Horario h " +
                         "LEFT JOIN FETCH h.profesor " +
                         "LEFT JOIN FETCH h.taller " +
@@ -27,6 +31,8 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
                         "WHERE i.cliente.user.email = :email")
         List<Horario> findByInscripcionesClienteUserEmail(@Param("email") String email);
 
+        // Busca horarios filtrando por el ID del taller, una fecha de inicio posterior
+        // a la fecha dada y que tengan vacantes disponibles.
         @Query("SELECT h FROM Horario h " +
                         "LEFT JOIN FETCH h.profesor " +
                         "WHERE h.taller.id = :tallerId " +
@@ -37,9 +43,13 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
                         @Param("fecha") LocalDate fecha,
                         @Param("vacantes") Integer vacantes);
 
+        // Busca y devuelve todos los horarios asociados a un Taller específico mediante
+        // su ID.
         @Query("SELECT h FROM Horario h LEFT JOIN FETCH h.profesor WHERE h.taller.id = :tallerId")
         List<Horario> findByTallerId(@Param("tallerId") Long tallerId);
 
+        // Busca un horario que coincida exactamente con los objetos Taller, Profesor,
+        // los días y el rango de horas especificados.
         Optional<Horario> findByTallerAndProfesorAndDiasDeClaseAndHoraInicioAndHoraFin(
                         Taller taller,
                         Profesor profesor,
@@ -47,5 +57,7 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
                         LocalTime horaInicio,
                         LocalTime horaFin);
 
+        // Busca horarios que no estén marcados como finalizados y cuya fecha de fin sea
+        // anterior a la fecha actual.
         List<Horario> findByFinalizadoFalseAndFechaFinBefore(LocalDate fecha);
 }
